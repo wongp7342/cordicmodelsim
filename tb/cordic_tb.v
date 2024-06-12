@@ -18,86 +18,6 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-module FloatToFixed32(
-  input         clock,
-  input         reset,
-  input  [31:0] io_in,
-  output [31:0] io_out
-);
-  wire [31:0] frac = {9'h0,io_in[22:0]}; // @[TestCORDIC.scala 15:42]
-  wire [7:0] exp = io_in[30:23]; // @[TestCORDIC.scala 16:25]
-  wire  sign = io_in[31]; // @[TestCORDIC.scala 17:26]
-  wire [7:0] shiftamt = exp - 8'h7f; // @[TestCORDIC.scala 18:37]
-  wire [31:0] _data_T_3 = frac | 32'h800000; // @[TestCORDIC.scala 21:34]
-  wire [36:0] _GEN_0 = {_data_T_3, 5'h0}; // @[TestCORDIC.scala 21:56]
-  wire [38:0] _data_T_4 = {{2'd0}, _GEN_0}; // @[TestCORDIC.scala 21:56]
-  wire [7:0] _data_T_8 = 8'sh0 - $signed(shiftamt); // @[TestCORDIC.scala 21:79]
-  wire [38:0] _data_T_9 = _data_T_4 >> _data_T_8; // @[TestCORDIC.scala 21:64]
-  wire [7:0] _data_T_13 = exp - 8'h7f; // @[TestCORDIC.scala 22:78]
-  wire [293:0] _GEN_1 = {{255'd0}, _data_T_4}; // @[TestCORDIC.scala 22:64]
-  wire [293:0] _data_T_14 = _GEN_1 << _data_T_13; // @[TestCORDIC.scala 22:64]
-  wire [293:0] data = shiftamt[7] ? {{255'd0}, _data_T_9} : _data_T_14; // @[TestCORDIC.scala 20:17]
-  wire [293:0] _io_out_T_3 = 294'h0 - data; // @[TestCORDIC.scala 23:40]
-  wire [293:0] _io_out_T_4 = sign ? _io_out_T_3 : data; // @[TestCORDIC.scala 23:16]
-  assign io_out = _io_out_T_4[31:0]; // @[TestCORDIC.scala 23:10]
-endmodule
-
-module CLZ32(
-  input  [31:0] io_in,
-  output [4:0]  io_out
-);
-  wire [31:0] _bx_T = io_in & 32'hffff0000; // @[TestCORDIC.scala 36:20]
-  wire  _bx_T_1 = _bx_T == 32'h0; // @[TestCORDIC.scala 36:37]
-  wire [47:0] _bx_T_2 = {io_in, 16'h0}; // @[TestCORDIC.scala 36:49]
-  wire [47:0] bx = _bx_T == 32'h0 ? _bx_T_2 : {{16'd0}, io_in}; // @[TestCORDIC.scala 36:15]
-  wire [47:0] _cx_T = bx & 48'hff000000; // @[TestCORDIC.scala 37:20]
-  wire  _cx_T_1 = _cx_T == 48'h0; // @[TestCORDIC.scala 37:37]
-  wire [55:0] _cx_T_2 = {bx, 8'h0}; // @[TestCORDIC.scala 37:49]
-  wire [55:0] cx = _cx_T == 48'h0 ? _cx_T_2 : {{8'd0}, bx}; // @[TestCORDIC.scala 37:15]
-  wire [55:0] _dx_T = cx & 56'hf0000000; // @[TestCORDIC.scala 38:20]
-  wire  _dx_T_1 = _dx_T == 56'h0; // @[TestCORDIC.scala 38:37]
-  wire [59:0] _dx_T_2 = {cx, 4'h0}; // @[TestCORDIC.scala 38:49]
-  wire [59:0] dx = _dx_T == 56'h0 ? _dx_T_2 : {{4'd0}, cx}; // @[TestCORDIC.scala 38:15]
-  wire [59:0] _ex_T = dx & 60'hc0000000; // @[TestCORDIC.scala 39:20]
-  wire  _ex_T_1 = _ex_T == 60'h0; // @[TestCORDIC.scala 39:37]
-  wire [61:0] _ex_T_2 = {dx, 2'h0}; // @[TestCORDIC.scala 39:49]
-  wire [61:0] ex = _ex_T == 60'h0 ? _ex_T_2 : {{2'd0}, dx}; // @[TestCORDIC.scala 39:15]
-  wire [3:0] _io_out_T_10 = {_bx_T_1,_cx_T_1,_dx_T_1,_ex_T_1}; // @[TestCORDIC.scala 41:112]
-  wire [61:0] _io_out_T_11 = ex & 62'h80000000; // @[TestCORDIC.scala 42:44]
-  assign io_out = {_io_out_T_10,_io_out_T_11 == 62'h0}; // @[TestCORDIC.scala 42:36]
-endmodule
-module FixedToFloat32(
-  input         clock,
-  input         reset,
-  input  [31:0] io_in,
-  output [31:0] io_out
-);
-  wire [31:0] clz32_io_in; // @[TestCORDIC.scala 62:21]
-  wire [4:0] clz32_io_out; // @[TestCORDIC.scala 62:21]
-  wire [31:0] _data_T_2 = ~io_in; // @[TestCORDIC.scala 59:35]
-  wire [31:0] _data_T_4 = _data_T_2 + 32'h1; // @[TestCORDIC.scala 59:50]
-  wire [31:0] data = io_in[31] ? _data_T_4 : io_in; // @[TestCORDIC.scala 59:14]
-  wire [3:0] _exp_T_2 = 4'sh4 - 4'sh1; // @[TestCORDIC.scala 66:16]
-  wire [4:0] _GEN_0 = {{1{_exp_T_2[3]}},_exp_T_2}; // @[TestCORDIC.scala 66:23]
-  wire [4:0] _exp_T_6 = $signed(_GEN_0) - $signed(clz32_io_out); // @[TestCORDIC.scala 66:23]
-  wire [7:0] _GEN_1 = {{3{_exp_T_6[4]}},_exp_T_6}; // @[TestCORDIC.scala 66:46]
-  wire [4:0] _frac_T_1 = clz32_io_out + 5'h1; // @[TestCORDIC.scala 67:42]
-  wire [62:0] _GEN_2 = {{31'd0}, data}; // @[TestCORDIC.scala 67:18]
-  wire [62:0] _frac_T_2 = _GEN_2 << _frac_T_1; // @[TestCORDIC.scala 67:18]
-  wire [5:0] _frac_T_4 = 6'h20 - 6'h17; // @[TestCORDIC.scala 67:60]
-  wire [62:0] _frac_T_5 = _frac_T_2 >> _frac_T_4; // @[TestCORDIC.scala 67:51]
-  wire [7:0] _io_out_T_1 = $signed(_GEN_1) + 8'sh7f; // @[TestCORDIC.scala 69:30]
-  wire [8:0] _io_out_T_2 = {io_in[31],_io_out_T_1}; // @[TestCORDIC.scala 69:23]
-  wire [63:0] frac = {{1'd0}, _frac_T_5}; // @[TestCORDIC.scala 56:18 67:8]
-  CLZ32 clz32 ( // @[TestCORDIC.scala 62:21]
-    .io_in(clz32_io_in),
-    .io_out(clz32_io_out)
-  );
-  assign io_out = {_io_out_T_2,frac[22:0]}; // @[TestCORDIC.scala 69:37]
-  assign clz32_io_in = io_in[31] ? _data_T_4 : io_in; // @[TestCORDIC.scala 59:14]
-endmodule
-
-
 module example_sim();
    
     reg clock_;
@@ -105,28 +25,10 @@ module example_sim();
     
     reg reset_;
     
-    wire [31:0] atanout_;
-    reg [5:0] atansel_;
 
-wire [31:0] fixed_;
-
-    reg [31:0] halverin_;
-    reg [4:0] halveramt_;
-    wire [31:0] halverout_;
-    
-    
+    wire [31:0] cosout_;
     reg [31:0] x0_, y0_, z0_;
-    wire [31:0] xn_, yn_, zn_, dbgatanout_;
-    wire [4:0] dbgcounter_;
-    reg [31:0] cc_;
-    wire output_ready_, pipe_ready_;
-wire [31:0] pipeline_count_;
-reg [31:0] testnum_;
-wire [4:0] nlz_;
-wire [31:0] floatout_;
-reg [31:0] testin;
-FloatToFixed32 fixeddut (.clock(clock_), .reset(reset_), .io_in(testin), .io_out(fixed_));
-FixedToFloat32 floatdut (.clock(clock_), .reset(reset_), .io_in(fixed_), .io_out(floatout_));
+    wire [31:0] xn_, yn_, zn_;
 
     CORDIC cordicdut(
     .clock(clock_),
@@ -136,175 +38,163 @@ FixedToFloat32 floatdut (.clock(clock_), .reset(reset_), .io_in(fixed_), .io_out
     .io_in_z0(z0_),
     .io_out_x(xn_),
     .io_out_y(yn_),
-    .io_out_z(zn_),
-    .io_out_output_ready(output_ready_),
-    .io_out_pipe_ready(pipe_ready_),
-    .io_out_pipeline_count(pipeline_count_)
+    .io_out_z(zn_)
+
     );
+/*
+Cos cosdut(
+	.clock(clock_),
+	.reset(reset_),
+	.io_in(z0_),
+	.io_out(cosout_));
+*/
 
 
-
- integer idx;
+integer idx;
 integer cyclecount;
  initial begin
     clock_ = 1'b0;
     reset_ = 1'b1;
-#10;
-	testnum_ = 32'h00F12345;
+	#10;
 
-    x0_ = 32'd1058764014;
-    y0_ = 32'h00000000;
-    z0_ = 32'h3f490fdb;
 
     reset_ = 1'b0;
-#10;
-/*
     x0_ = 32'd1058764014;
+	//x0_ = 32'h3f800000;
     y0_ = 32'h00000000;
     z0_ = 32'h3f490fdb;
-    #10;
-    x0_ = 32'd1058764014;
-    y0_ = 32'h00000000;
-    z0_ = 32'h3f060a92;
-*/
-/*
-testin = 32'h404168a9; #10;
-testin = 32'h3e8c77fd; #10;
-testin = 32'h3fa44dd4; #10;
-testin = 32'h3fe728be; #10;
-testin = 32'hbf2cf6cb; #10;
-testin = 32'h40490a61; #10;
-testin = 32'h3e6186ac; #10;
-testin = 32'hc00b5707; #10;
-testin = 32'hc00fa437; #10;
-testin = 32'h4027bbc1; #10;
-testin = 32'hc00997e4; #10;
-testin = 32'hc02a37cf; #10;
-testin = 32'hc049abf1; #10;
-testin = 32'h3fc7b474; #10;
-testin = 32'h3c137ced; #10;
-testin = 32'h40118233; #10;
-testin = 32'hbfdb8a58; #10;
-testin = 32'h4034b084; #10;
-testin = 32'hbfe0e849; #10;
-testin = 32'h3f72b749; #10;
-testin = 32'h40398b4a; #10;
-testin = 32'h401ac02f; #10;
-testin = 32'h3fd3550c; #10;
-testin = 32'h3f075f61; #10;
-testin = 32'h3f228e09; #10;
-testin = 32'h3fd25aec; #10;
-testin = 32'h3e375f37; #10;
-testin = 32'hc045de9d; #10;
-testin = 32'h3f3a6a5b; #10;
-testin = 32'hc04b916a; #10;
-testin = 32'hbecc30c2; #10;
-testin = 32'h3f076ac5; #10;
-testin = 32'h3ea13126; #10;
-testin = 32'hc01587bd; #10;
-testin = 32'hbf62e5fb; #10;
-testin = 32'h40371101; #10;
-testin = 32'hc01aa5eb; #10;
-testin = 32'h4023877b; #10;
-testin = 32'hc0226e95; #10;
-testin = 32'hbfb84326; #10;
-testin = 32'h3ffa355a; #10;
-testin = 32'hbfbbbbd4; #10;
-testin = 32'hbf60c34b; #10;
-testin = 32'h4001974b; #10;
-testin = 32'hc0482c3f; #10;
-testin = 32'h40168b39; #10;
-testin = 32'h3f89e1de; #10;
-testin = 32'hbfcf91b9; #10;
-testin = 32'h3ffa265d; #10;
-testin = 32'h4022a559; #10;
-testin = 32'h40230d85; #10;
-testin = 32'h3fd0ebd3; #10;
-testin = 32'h3fde79f4; #10;
-testin = 32'h3f7a3def; #10;
-testin = 32'hbf87b59b; #10;
-testin = 32'hbf59204b; #10;
-testin = 32'hbf19ae74; #10;
-testin = 32'h4015c3b5; #10;
-testin = 32'hbf37f884; #10;
-testin = 32'hc045f995; #10;
-testin = 32'h40185ada; #10;
-testin = 32'h4006a456; #10;
-testin = 32'h3f2826ab; #10;
-testin = 32'hbf069e40; #10;
-testin = 32'h403f4527; #10;
-testin = 32'h403f78bb; #10;
-testin = 32'hbf62fc78; #10;
-testin = 32'hc0298952; #10;
-testin = 32'h4014d7a7; #10;
-testin = 32'hbe505246; #10;
-testin = 32'hbf5e095b; #10;
-testin = 32'h3f87938a; #10;
-testin = 32'h3fc68b01; #10;
-testin = 32'h3fbceacb; #10;
-testin = 32'hbe0c77eb; #10;
-testin = 32'h3fd283a0; #10;
-testin = 32'h3f1b603e; #10;
-testin = 32'hc011ff1f; #10;
-testin = 32'hc04caf9b; #10;
-testin = 32'hbf28f545; #10;
-testin = 32'hc03d8254; #10;
-testin = 32'h40248678; #10;
-testin = 32'hc00feff7; #10;
-testin = 32'h3fffc669; #10;
-testin = 32'h3ea76b2a; #10;
-testin = 32'hbdb446ac; #10;
-testin = 32'hc0048d6d; #10;
-testin = 32'h403caa57; #10;
-testin = 32'hbf781c3e; #10;
-testin = 32'h3edce804; #10;
-testin = 32'h4044d951; #10;
-testin = 32'hbfe7a988; #10;
-testin = 32'hbf2f9ce3; #10;
-testin = 32'h3f02e9b1; #10;
-testin = 32'h3f62b0ea; #10;
-testin = 32'hbf6b2a81; #10;
-testin = 32'h3e9054c2; #10;
-testin = 32'h404e15ab; #10;
-testin = 32'hbeb15b20; #10;
-testin = 32'hbf1d193f; #10;
-testin = 32'hbe51807e; #10;
-testin = 32'h40007ad4; #10;
-testin = 32'hc031a51a; #10;
-testin = 32'hbfeff62d; #10;
-testin = 32'h3e863d56; #10;
-testin = 32'h3e9ddfb5; #10;
-testin = 32'h403f6f48; #10;
-testin = 32'hc01688d5; #10;
-testin = 32'h3f9fcace; #10;
-testin = 32'h4040e83c; #10;
-testin = 32'h3e56268e; #10;
-testin = 32'h3fc11743; #10;
-testin = 32'h40174625; #10;
-testin = 32'h3f973602; #10;
-testin = 32'h3e923235; #10;
-testin = 32'hbf07d411; #10;
-testin = 32'hc0082fc3; #10;
-testin = 32'h3fb7c2d0; #10;
-testin = 32'hbf4dccf0; #10;
-testin = 32'h3dfe3784; #10;
-testin = 32'hbfad544c; #10;
-testin = 32'hbf7309ea; #10;
-testin = 32'h3fc48b0d; #10;
-testin = 32'h3f972e60; #10;
-testin = 32'h40322081; #10;
-testin = 32'hbf4cdb36; #10;
-testin = 32'hc03d5bff; #10;
-testin = 32'hbe1fd75f; #10;
 
-*/
+#10;
+z0_ = 32'hbfc90fdb; #10; //cos(-1.570796)=-0.000000, sin(-1.570796)=-1.000000
+z0_ = 32'hbfc5eb9c; #10; //cos(-1.546253)=0.024541, sin(-1.546253)=-0.999699
+z0_ = 32'hbfc2c75c; #10; //cos(-1.521709)=0.049068, sin(-1.521709)=-0.998795
+z0_ = 32'hbfbfa31d; #10; //cos(-1.497165)=0.073564, sin(-1.497165)=-0.997290
+z0_ = 32'hbfbc7edd; #10; //cos(-1.472622)=0.098017, sin(-1.472622)=-0.995185
+z0_ = 32'hbfb95a9e; #10; //cos(-1.448078)=0.122411, sin(-1.448078)=-0.992480
+z0_ = 32'hbfb6365e; #10; //cos(-1.423534)=0.146730, sin(-1.423534)=-0.989177
+z0_ = 32'hbfb3121f; #10; //cos(-1.398991)=0.170962, sin(-1.398991)=-0.985278
+z0_ = 32'hbfafede0; #10; //cos(-1.374447)=0.195090, sin(-1.374447)=-0.980785
+z0_ = 32'hbfacc9a0; #10; //cos(-1.349903)=0.219101, sin(-1.349903)=-0.975702
+z0_ = 32'hbfa9a561; #10; //cos(-1.325359)=0.242980, sin(-1.325359)=-0.970031
+z0_ = 32'hbfa68121; #10; //cos(-1.300816)=0.266713, sin(-1.300816)=-0.963776
+z0_ = 32'hbfa35ce2; #10; //cos(-1.276272)=0.290285, sin(-1.276272)=-0.956940
+z0_ = 32'hbfa038a2; #10; //cos(-1.251728)=0.313682, sin(-1.251728)=-0.949528
+z0_ = 32'hbf9d1463; #10; //cos(-1.227185)=0.336890, sin(-1.227185)=-0.941544
+z0_ = 32'hbf99f024; #10; //cos(-1.202641)=0.359895, sin(-1.202641)=-0.932993
+z0_ = 32'hbf96cbe4; #10; //cos(-1.178097)=0.382683, sin(-1.178097)=-0.923880
+z0_ = 32'hbf93a7a5; #10; //cos(-1.153554)=0.405241, sin(-1.153554)=-0.914210
+z0_ = 32'hbf908366; #10; //cos(-1.129010)=0.427555, sin(-1.129010)=-0.903989
+z0_ = 32'hbf8d5f26; #10; //cos(-1.104466)=0.449611, sin(-1.104466)=-0.893224
+z0_ = 32'hbf8a3ae6; #10; //cos(-1.079922)=0.471397, sin(-1.079922)=-0.881921
+z0_ = 32'hbf8716a7; #10; //cos(-1.055379)=0.492898, sin(-1.055379)=-0.870087
+z0_ = 32'hbf83f268; #10; //cos(-1.030835)=0.514103, sin(-1.030835)=-0.857729
+z0_ = 32'hbf80ce28; #10; //cos(-1.006291)=0.534998, sin(-1.006291)=-0.844854
+z0_ = 32'hbf7b53d2; #10; //cos(-0.981748)=0.555570, sin(-0.981748)=-0.831470
+z0_ = 32'hbf750b53; #10; //cos(-0.957204)=0.575808, sin(-0.957204)=-0.817585
+z0_ = 32'hbf6ec2d4; #10; //cos(-0.932660)=0.595699, sin(-0.932660)=-0.803208
+z0_ = 32'hbf687a55; #10; //cos(-0.908117)=0.615232, sin(-0.908117)=-0.788346
+z0_ = 32'hbf6231d6; #10; //cos(-0.883573)=0.634393, sin(-0.883573)=-0.773010
+z0_ = 32'hbf5be958; #10; //cos(-0.859029)=0.653173, sin(-0.859029)=-0.757209
+z0_ = 32'hbf55a0d9; #10; //cos(-0.834486)=0.671559, sin(-0.834486)=-0.740951
+z0_ = 32'hbf4f585a; #10; //cos(-0.809942)=0.689541, sin(-0.809942)=-0.724247
+z0_ = 32'hbf490fdb; #10; //cos(-0.785398)=0.707107, sin(-0.785398)=-0.707107
+z0_ = 32'hbf42c75c; #10; //cos(-0.760854)=0.724247, sin(-0.760854)=-0.689541
+z0_ = 32'hbf3c7edd; #10; //cos(-0.736311)=0.740951, sin(-0.736311)=-0.671559
+z0_ = 32'hbf36365e; #10; //cos(-0.711767)=0.757209, sin(-0.711767)=-0.653173
+z0_ = 32'hbf2fede0; #10; //cos(-0.687223)=0.773010, sin(-0.687223)=-0.634393
+z0_ = 32'hbf29a561; #10; //cos(-0.662680)=0.788346, sin(-0.662680)=-0.615232
+z0_ = 32'hbf235ce2; #10; //cos(-0.638136)=0.803208, sin(-0.638136)=-0.595699
+z0_ = 32'hbf1d1463; #10; //cos(-0.613592)=0.817585, sin(-0.613592)=-0.575808
+z0_ = 32'hbf16cbe4; #10; //cos(-0.589049)=0.831470, sin(-0.589049)=-0.555570
+z0_ = 32'hbf108366; #10; //cos(-0.564505)=0.844854, sin(-0.564505)=-0.534998
+z0_ = 32'hbf0a3ae6; #10; //cos(-0.539961)=0.857729, sin(-0.539961)=-0.514103
+z0_ = 32'hbf03f268; #10; //cos(-0.515418)=0.870087, sin(-0.515418)=-0.492898
+z0_ = 32'hbefb53d0; #10; //cos(-0.490874)=0.881921, sin(-0.490874)=-0.471397
+z0_ = 32'hbeeec2d4; #10; //cos(-0.466330)=0.893224, sin(-0.466330)=-0.449611
+z0_ = 32'hbee231d8; #10; //cos(-0.441787)=0.903989, sin(-0.441787)=-0.427555
+z0_ = 32'hbed5a0d8; #10; //cos(-0.417243)=0.914210, sin(-0.417243)=-0.405241
+z0_ = 32'hbec90fdc; #10; //cos(-0.392699)=0.923880, sin(-0.392699)=-0.382683
+z0_ = 32'hbebc7edc; #10; //cos(-0.368155)=0.932993, sin(-0.368155)=-0.359895
+z0_ = 32'hbeafede0; #10; //cos(-0.343612)=0.941544, sin(-0.343612)=-0.336890
+z0_ = 32'hbea35ce0; #10; //cos(-0.319068)=0.949528, sin(-0.319068)=-0.313682
+z0_ = 32'hbe96cbe4; #10; //cos(-0.294524)=0.956940, sin(-0.294524)=-0.290285
+z0_ = 32'hbe8a3ae8; #10; //cos(-0.269981)=0.963776, sin(-0.269981)=-0.266713
+z0_ = 32'hbe7b53d0; #10; //cos(-0.245437)=0.970031, sin(-0.245437)=-0.242980
+z0_ = 32'hbe6231d8; #10; //cos(-0.220893)=0.975702, sin(-0.220893)=-0.219101
+z0_ = 32'hbe490fd8; #10; //cos(-0.196350)=0.980785, sin(-0.196350)=-0.195090
+z0_ = 32'hbe2fede0; #10; //cos(-0.171806)=0.985278, sin(-0.171806)=-0.170962
+z0_ = 32'hbe16cbe8; #10; //cos(-0.147262)=0.989177, sin(-0.147262)=-0.146731
+z0_ = 32'hbdfb53d0; #10; //cos(-0.122718)=0.992480, sin(-0.122718)=-0.122411
+z0_ = 32'hbdc90fe0; #10; //cos(-0.098175)=0.995185, sin(-0.098175)=-0.098017
+z0_ = 32'hbd96cbe0; #10; //cos(-0.073631)=0.997290, sin(-0.073631)=-0.073565
+z0_ = 32'hbd490fe0; #10; //cos(-0.049087)=0.998795, sin(-0.049087)=-0.049068
+z0_ = 32'hbcc90fc0; #10; //cos(-0.024544)=0.999699, sin(-0.024544)=-0.024541
+z0_ = 32'h00000000; #10; //cos(0.000000)=1.000000, sin(0.000000)=0.000000
+z0_ = 32'h3cc90fc0; #10; //cos(0.024544)=0.999699, sin(0.024544)=0.024541
+z0_ = 32'h3d490fe0; #10; //cos(0.049087)=0.998795, sin(0.049087)=0.049068
+z0_ = 32'h3d96cbe0; #10; //cos(0.073631)=0.997290, sin(0.073631)=0.073565
+z0_ = 32'h3dc90fe0; #10; //cos(0.098175)=0.995185, sin(0.098175)=0.098017
+z0_ = 32'h3dfb53d0; #10; //cos(0.122718)=0.992480, sin(0.122718)=0.122411
+z0_ = 32'h3e16cbe8; #10; //cos(0.147262)=0.989177, sin(0.147262)=0.146731
+z0_ = 32'h3e2fede0; #10; //cos(0.171806)=0.985278, sin(0.171806)=0.170962
+z0_ = 32'h3e490fd8; #10; //cos(0.196350)=0.980785, sin(0.196350)=0.195090
+z0_ = 32'h3e6231d8; #10; //cos(0.220893)=0.975702, sin(0.220893)=0.219101
+z0_ = 32'h3e7b53d0; #10; //cos(0.245437)=0.970031, sin(0.245437)=0.242980
+z0_ = 32'h3e8a3ae8; #10; //cos(0.269981)=0.963776, sin(0.269981)=0.266713
+z0_ = 32'h3e96cbe4; #10; //cos(0.294524)=0.956940, sin(0.294524)=0.290285
+z0_ = 32'h3ea35ce0; #10; //cos(0.319068)=0.949528, sin(0.319068)=0.313682
+z0_ = 32'h3eafede0; #10; //cos(0.343612)=0.941544, sin(0.343612)=0.336890
+z0_ = 32'h3ebc7edc; #10; //cos(0.368155)=0.932993, sin(0.368155)=0.359895
+z0_ = 32'h3ec90fdc; #10; //cos(0.392699)=0.923880, sin(0.392699)=0.382683
+z0_ = 32'h3ed5a0d8; #10; //cos(0.417243)=0.914210, sin(0.417243)=0.405241
+z0_ = 32'h3ee231d4; #10; //cos(0.441786)=0.903989, sin(0.441786)=0.427555
+z0_ = 32'h3eeec2d4; #10; //cos(0.466330)=0.893224, sin(0.466330)=0.449611
+z0_ = 32'h3efb53d4; #10; //cos(0.490874)=0.881921, sin(0.490874)=0.471397
+z0_ = 32'h3f03f266; #10; //cos(0.515417)=0.870087, sin(0.515417)=0.492898
+z0_ = 32'h3f0a3ae6; #10; //cos(0.539961)=0.857729, sin(0.539961)=0.514103
+z0_ = 32'h3f108366; #10; //cos(0.564505)=0.844854, sin(0.564505)=0.534998
+z0_ = 32'h3f16cbe6; #10; //cos(0.589049)=0.831470, sin(0.589049)=0.555570
+z0_ = 32'h3f1d1462; #10; //cos(0.613592)=0.817585, sin(0.613592)=0.575808
+z0_ = 32'h3f235ce2; #10; //cos(0.638136)=0.803208, sin(0.638136)=0.595699
+z0_ = 32'h3f29a562; #10; //cos(0.662680)=0.788346, sin(0.662680)=0.615232
+z0_ = 32'h3f2fedde; #10; //cos(0.687223)=0.773010, sin(0.687223)=0.634393
+z0_ = 32'h3f36365e; #10; //cos(0.711767)=0.757209, sin(0.711767)=0.653173
+z0_ = 32'h3f3c7ede; #10; //cos(0.736311)=0.740951, sin(0.736311)=0.671559
+z0_ = 32'h3f42c75e; #10; //cos(0.760855)=0.724247, sin(0.760855)=0.689541
+z0_ = 32'h3f490fda; #10; //cos(0.785398)=0.707107, sin(0.785398)=0.707107
+z0_ = 32'h3f4f585a; #10; //cos(0.809942)=0.689541, sin(0.809942)=0.724247
+z0_ = 32'h3f55a0da; #10; //cos(0.834486)=0.671559, sin(0.834486)=0.740951
+z0_ = 32'h3f5be956; #10; //cos(0.859029)=0.653173, sin(0.859029)=0.757209
+z0_ = 32'h3f6231d6; #10; //cos(0.883573)=0.634393, sin(0.883573)=0.773010
+z0_ = 32'h3f687a56; #10; //cos(0.908117)=0.615232, sin(0.908117)=0.788346
+z0_ = 32'h3f6ec2d6; #10; //cos(0.932660)=0.595699, sin(0.932660)=0.803208
+z0_ = 32'h3f750b52; #10; //cos(0.957204)=0.575808, sin(0.957204)=0.817585
+z0_ = 32'h3f7b53d2; #10; //cos(0.981748)=0.555570, sin(0.981748)=0.831470
+z0_ = 32'h3f80ce29; #10; //cos(1.006292)=0.534998, sin(1.006292)=0.844854
+z0_ = 32'h3f83f267; #10; //cos(1.030835)=0.514103, sin(1.030835)=0.857729
+z0_ = 32'h3f8716a7; #10; //cos(1.055379)=0.492898, sin(1.055379)=0.870087
+z0_ = 32'h3f8a3ae7; #10; //cos(1.079923)=0.471397, sin(1.079923)=0.881921
+z0_ = 32'h3f8d5f25; #10; //cos(1.104466)=0.449611, sin(1.104466)=0.893224
+z0_ = 32'h3f908365; #10; //cos(1.129010)=0.427555, sin(1.129010)=0.903989
+z0_ = 32'h3f93a7a5; #10; //cos(1.153554)=0.405241, sin(1.153554)=0.914210
+z0_ = 32'h3f96cbe5; #10; //cos(1.178097)=0.382683, sin(1.178097)=0.923880
+z0_ = 32'h3f99f023; #10; //cos(1.202641)=0.359895, sin(1.202641)=0.932993
+z0_ = 32'h3f9d1463; #10; //cos(1.227185)=0.336890, sin(1.227185)=0.941544
+z0_ = 32'h3fa038a3; #10; //cos(1.251728)=0.313682, sin(1.251728)=0.949528
+z0_ = 32'h3fa35ce1; #10; //cos(1.276272)=0.290285, sin(1.276272)=0.956940
+z0_ = 32'h3fa68121; #10; //cos(1.300816)=0.266713, sin(1.300816)=0.963776
+z0_ = 32'h3fa9a561; #10; //cos(1.325359)=0.242980, sin(1.325359)=0.970031
+z0_ = 32'h3facc9a1; #10; //cos(1.349903)=0.219101, sin(1.349903)=0.975702
+z0_ = 32'h3fafeddf; #10; //cos(1.374447)=0.195090, sin(1.374447)=0.980785
+z0_ = 32'h3fb3121f; #10; //cos(1.398991)=0.170962, sin(1.398991)=0.985278
+z0_ = 32'h3fb6365f; #10; //cos(1.423534)=0.146730, sin(1.423534)=0.989177
+z0_ = 32'h3fb95a9d; #10; //cos(1.448078)=0.122411, sin(1.448078)=0.992480
+z0_ = 32'h3fbc7edd; #10; //cos(1.472622)=0.098017, sin(1.472622)=0.995185
+z0_ = 32'h3fbfa31d; #10; //cos(1.497165)=0.073564, sin(1.497165)=0.997290
+z0_ = 32'h3fc2c75d; #10; //cos(1.521709)=0.049068, sin(1.521709)=0.998795
+z0_ = 32'h3fc5eb9b; #10; //cos(1.546253)=0.024541, sin(1.546253)=0.999699
+z0_ = 32'h3fc90fdb; #10; //cos(1.570796)=-0.000000, sin(1.570796)=1.000000
 
-    for(idx = 0; idx < 512; idx = idx + 1) begin
-
-        atansel_ = idx[4:0];
-        cc_ = idx[31:0];
-        #10;
-    end
     
  end
     

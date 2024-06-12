@@ -30,57 +30,25 @@ echo "+====================================="
 vsim work.example_sim -t 1us
 
 ###################################### mus  ####################################
-add wave -noupdate -format logic -radix decimal example_sim/cc_
+
 add wave -noupdate -format logic -radix hexadecimal example_sim/clock_
 add wave -noupdate -format logic -radix hexadecimal example_sim/reset_
-add wave -noupdate -format logic -radix decimal example_sim/cordicdut/io_out_pipeline_count
+
+
+add wave -noupdate -format logic -radix float32 example_sim/cordicdut/io_in_x0
+add wave -noupdate -format logic -radix hexadecimal example_sim/cordicdut/io_in_x0
+add wave -noupdate -format logic -radix float32 example_sim/cordicdut/io_in_y0
+add wave -noupdate -format logic -radix hexadecimal example_sim/cordicdut/io_in_y0
+add wave -noupdate -format logic -radix float32 example_sim/cordicdut/io_in_z0
+add wave -noupdate -format logic -radix hexadecimal example_sim/cordicdut/io_in_z0
 
 add wave -noupdate -format logic -radix float32 example_sim/cordicdut/io_out_x
 add wave -noupdate -format logic -radix hexadecimal example_sim/cordicdut/io_out_x
 add wave -noupdate -format logic -radix float32 example_sim/cordicdut/io_out_y
 add wave -noupdate -format logic -radix hexadecimal example_sim/cordicdut/io_out_y
-
 add wave -noupdate -format logic -radix float32 example_sim/cordicdut/io_out_z
-add wave -noupdate -format logic -radix decimal example_sim/cordicdut/io_out_pipe_ready
-add wave -noupdate -format logic -radix decimal example_sim/cordicdut/io_out_output_ready
 
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/floatcmp*
+add wave -noupdate -format logic -radix hexadecimal example_sim/cordicdut/*
+add wave -noupdate -format logic -radix hexadecimal example_sim/cosdut/*
 
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/theta_addersubber_io_in_a
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/theta_addersubber_io_in_b
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/theta_addersubber_io_out_s
-
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/xhalver_io_in
-add wave -noupdate -format logic -radix decimal example_sim/cordicdut/xhalver_io_amt
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/xhalver_io_out
-
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/yhalver_io_in
-add wave -noupdate -format logic -radix decimal example_sim/cordicdut/yhalver_io_amt
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/yhalver_io_out
-
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/xadder_io_in_a
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/xadder_io_in_b
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/xadder_io_out_s
-
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/yadder_io_in_a
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/yadder_io_in_b
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/yadder_io_out_s
-
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/x_0
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/y_0
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/z_0
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/theta_*
-add wave -noupdate -format logic -radix decimal example_sim/cordicdut/cnt_0
-
-#add wave -noupdate -format logic -radix float32 example_sim/cordicdut/x_1
-#add wave -noupdate -format logic -radix float32 example_sim/cordicdut/y_1
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/z_1
-#add wave -noupdate -format logic -radix float32 example_sim/cordicdut/theta_1
-add wave -noupdate -format logic -radix decimal example_sim/cordicdut/cnt_1
-
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/x_2
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/y_2
-add wave -noupdate -format logic -radix float32 example_sim/cordicdut/z_2
-#add wave -noupdate -format logic -radix float32 example_sim/cordicdut/theta_2
-#add wave -noupdate -format logic -radix decimal example_sim/cordicdut/cnt_2
 run 400us

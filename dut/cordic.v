@@ -1,494 +1,75 @@
-module CORDIC_Controller(
-  input         clock,
-  input         reset,
-  output        io_out_output_rdy,
-  output        io_out_pipe_rdy,
-  output [31:0] io_out_pipeline_count
-);
-`ifdef RANDOMIZE_REG_INIT
-  reg [31:0] _RAND_0;
-  reg [31:0] _RAND_1;
-`endif // RANDOMIZE_REG_INIT
-  reg [31:0] iteration_count; // @[TestCORDIC.scala 122:40]
-  reg [31:0] pipeline_count; // @[TestCORDIC.scala 123:38]
-  wire [5:0] _io_out_output_rdy_T_1 = 6'h20 - 6'h2; // @[TestCORDIC.scala 132:53]
-  wire [31:0] _GEN_0 = {{26'd0}, _io_out_output_rdy_T_1}; // @[TestCORDIC.scala 132:44]
-  wire  _io_out_pipe_rdy_T = pipeline_count == 32'h3; // @[TestCORDIC.scala 133:41]
-  wire [31:0] _pipeline_count_T_2 = pipeline_count + 32'h1; // @[TestCORDIC.scala 135:69]
-  wire [31:0] _iteration_count_T_5 = iteration_count + 32'h1; // @[TestCORDIC.scala 136:107]
-  assign io_out_output_rdy = iteration_count == _GEN_0 & io_out_pipe_rdy; // @[TestCORDIC.scala 132:59]
-  assign io_out_pipe_rdy = pipeline_count == 32'h3; // @[TestCORDIC.scala 133:41]
-  assign io_out_pipeline_count = pipeline_count; // @[TestCORDIC.scala 124:25]
-  always @(posedge clock) begin
-    if (reset) begin // @[TestCORDIC.scala 122:40]
-      iteration_count <= 32'h0; // @[TestCORDIC.scala 122:40]
-    end else if (_io_out_pipe_rdy_T) begin // @[TestCORDIC.scala 136:25]
-      if (iteration_count == 32'h21) begin // @[TestCORDIC.scala 136:53]
-        iteration_count <= 32'h0;
-      end else begin
-        iteration_count <= _iteration_count_T_5;
-      end
-    end
-    if (reset) begin // @[TestCORDIC.scala 123:38]
-      pipeline_count <= 32'h0; // @[TestCORDIC.scala 123:38]
-    end else if (_io_out_pipe_rdy_T) begin // @[TestCORDIC.scala 135:24]
-      pipeline_count <= 32'h1;
-    end else begin
-      pipeline_count <= _pipeline_count_T_2;
-    end
-  end
-// Register and memory initialization
-`ifdef RANDOMIZE_GARBAGE_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_INVALID_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_REG_INIT
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-`define RANDOMIZE
-`endif
-`ifndef RANDOM
-`define RANDOM $random
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-  integer initvar;
-`endif
-`ifndef SYNTHESIS
-`ifdef FIRRTL_BEFORE_INITIAL
-`FIRRTL_BEFORE_INITIAL
-`endif
-initial begin
-  `ifdef RANDOMIZE
-    `ifdef INIT_RANDOM
-      `INIT_RANDOM
-    `endif
-    `ifndef VERILATOR
-      `ifdef RANDOMIZE_DELAY
-        #`RANDOMIZE_DELAY begin end
-      `else
-        #0.002 begin end
-      `endif
-    `endif
-`ifdef RANDOMIZE_REG_INIT
-  _RAND_0 = {1{`RANDOM}};
-  iteration_count = _RAND_0[31:0];
-  _RAND_1 = {1{`RANDOM}};
-  pipeline_count = _RAND_1[31:0];
-`endif // RANDOMIZE_REG_INIT
-  `endif // RANDOMIZE
-end // initial
-`ifdef FIRRTL_AFTER_INITIAL
-`FIRRTL_AFTER_INITIAL
-`endif
-`endif // SYNTHESIS
-endmodule
-module CORDIC_ROM(
-  output [31:0] io_atanout,
-  input  [5:0]  io_atanselect
-);
-  wire [31:0] _GEN_1 = 6'h1 == io_atanselect ? 32'h3eed6338 : 32'h3f490fdb; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_2 = 6'h2 == io_atanselect ? 32'h3e7adbb0 : _GEN_1; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_3 = 6'h3 == io_atanselect ? 32'h3dfeadd5 : _GEN_2; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_4 = 6'h4 == io_atanselect ? 32'h3d7faade : _GEN_3; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_5 = 6'h5 == io_atanselect ? 32'h3cffeaae : _GEN_4; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_6 = 6'h6 == io_atanselect ? 32'h3c7ffaab : _GEN_5; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_7 = 6'h7 == io_atanselect ? 32'h3bfffeab : _GEN_6; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_8 = 6'h8 == io_atanselect ? 32'h3b7fffab : _GEN_7; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_9 = 6'h9 == io_atanselect ? 32'h3affffeb : _GEN_8; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_10 = 6'ha == io_atanselect ? 32'h3a7ffffb : _GEN_9; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_11 = 6'hb == io_atanselect ? 32'h39ffffff : _GEN_10; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_12 = 6'hc == io_atanselect ? 32'h39800000 : _GEN_11; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_13 = 6'hd == io_atanselect ? 32'h39000000 : _GEN_12; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_14 = 6'he == io_atanselect ? 32'h38800000 : _GEN_13; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_15 = 6'hf == io_atanselect ? 32'h38000000 : _GEN_14; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_16 = 6'h10 == io_atanselect ? 32'h37800000 : _GEN_15; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_17 = 6'h11 == io_atanselect ? 32'h37000000 : _GEN_16; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_18 = 6'h12 == io_atanselect ? 32'h36800000 : _GEN_17; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_19 = 6'h13 == io_atanselect ? 32'h36000000 : _GEN_18; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_20 = 6'h14 == io_atanselect ? 32'h35800000 : _GEN_19; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_21 = 6'h15 == io_atanselect ? 32'h35000000 : _GEN_20; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_22 = 6'h16 == io_atanselect ? 32'h34800000 : _GEN_21; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_23 = 6'h17 == io_atanselect ? 32'h34000000 : _GEN_22; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_24 = 6'h18 == io_atanselect ? 32'h33800000 : _GEN_23; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_25 = 6'h19 == io_atanselect ? 32'h33000000 : _GEN_24; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_26 = 6'h1a == io_atanselect ? 32'h32800000 : _GEN_25; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_27 = 6'h1b == io_atanselect ? 32'h32000000 : _GEN_26; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_28 = 6'h1c == io_atanselect ? 32'h31800000 : _GEN_27; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_29 = 6'h1d == io_atanselect ? 32'h31000000 : _GEN_28; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_30 = 6'h1e == io_atanselect ? 32'h30800000 : _GEN_29; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_31 = 6'h1f == io_atanselect ? 32'h40490fdb : _GEN_30; // @[TestCORDIC.scala 255:{14,14}]
-  wire [31:0] _GEN_32 = 6'h20 == io_atanselect ? 32'h3f490fdb : _GEN_31; // @[TestCORDIC.scala 255:{14,14}]
-  assign io_atanout = 6'h21 == io_atanselect ? 32'h3eed6338 : _GEN_32; // @[TestCORDIC.scala 255:{14,14}]
-endmodule
-module full_subber(
-  input  [7:0] io_in_a,
-  input  [7:0] io_in_b,
-  output [7:0] io_out_s,
-  output       io_out_c
-);
-  wire [8:0] _result_T = io_in_a - io_in_b; // @[BinaryDesigns.scala 69:23]
-  wire [9:0] _result_T_2 = _result_T - 9'h0; // @[BinaryDesigns.scala 69:34]
-  wire [8:0] result = _result_T_2[8:0]; // @[BinaryDesigns.scala 68:22 69:12]
-  assign io_out_s = result[7:0]; // @[BinaryDesigns.scala 70:23]
-  assign io_out_c = result[8]; // @[BinaryDesigns.scala 71:23]
-endmodule
-module twoscomplement(
-  input  [7:0] io_in,
-  output [7:0] io_out
-);
-  wire [7:0] _x_T = ~io_in; // @[BinaryDesigns.scala 25:16]
-  assign io_out = 8'h1 + _x_T; // @[BinaryDesigns.scala 25:14]
-endmodule
-module full_adder(
-  input  [23:0] io_in_a,
-  input  [23:0] io_in_b,
-  output [23:0] io_out_s,
-  output        io_out_c
-);
-  wire [24:0] _result_T = io_in_a + io_in_b; // @[BinaryDesigns.scala 55:23]
-  wire [25:0] _result_T_1 = {{1'd0}, _result_T}; // @[BinaryDesigns.scala 55:34]
-  wire [24:0] result = _result_T_1[24:0]; // @[BinaryDesigns.scala 54:22 55:12]
-  assign io_out_s = result[23:0]; // @[BinaryDesigns.scala 56:23]
-  assign io_out_c = result[24]; // @[BinaryDesigns.scala 57:23]
-endmodule
-module twoscomplement_1(
-  input  [23:0] io_in,
-  output [23:0] io_out
-);
-  wire [23:0] _x_T = ~io_in; // @[BinaryDesigns.scala 25:16]
-  assign io_out = 24'h1 + _x_T; // @[BinaryDesigns.scala 25:14]
-endmodule
-module shifter(
-  input  [23:0] io_in_a,
-  input  [4:0]  io_in_b,
-  output [23:0] io_out_s
-);
-  wire [23:0] _result_T = io_in_a >> io_in_b; // @[BinaryDesigns.scala 39:25]
-  wire [54:0] _GEN_0 = {{31'd0}, _result_T}; // @[BinaryDesigns.scala 38:26 39:14 41:14]
-  assign io_out_s = _GEN_0[23:0]; // @[BinaryDesigns.scala 36:22]
-endmodule
-module leadingOneDetector(
-  input  [23:0] io_in,
-  output [4:0]  io_out
-);
-  wire [1:0] _hotValue_T = io_in[1] ? 2'h2 : 2'h1; // @[Mux.scala 47:70]
-  wire [1:0] _hotValue_T_1 = io_in[2] ? 2'h3 : _hotValue_T; // @[Mux.scala 47:70]
-  wire [2:0] _hotValue_T_2 = io_in[3] ? 3'h4 : {{1'd0}, _hotValue_T_1}; // @[Mux.scala 47:70]
-  wire [2:0] _hotValue_T_3 = io_in[4] ? 3'h5 : _hotValue_T_2; // @[Mux.scala 47:70]
-  wire [2:0] _hotValue_T_4 = io_in[5] ? 3'h6 : _hotValue_T_3; // @[Mux.scala 47:70]
-  wire [2:0] _hotValue_T_5 = io_in[6] ? 3'h7 : _hotValue_T_4; // @[Mux.scala 47:70]
-  wire [3:0] _hotValue_T_6 = io_in[7] ? 4'h8 : {{1'd0}, _hotValue_T_5}; // @[Mux.scala 47:70]
-  wire [3:0] _hotValue_T_7 = io_in[8] ? 4'h9 : _hotValue_T_6; // @[Mux.scala 47:70]
-  wire [3:0] _hotValue_T_8 = io_in[9] ? 4'ha : _hotValue_T_7; // @[Mux.scala 47:70]
-  wire [3:0] _hotValue_T_9 = io_in[10] ? 4'hb : _hotValue_T_8; // @[Mux.scala 47:70]
-  wire [3:0] _hotValue_T_10 = io_in[11] ? 4'hc : _hotValue_T_9; // @[Mux.scala 47:70]
-  wire [3:0] _hotValue_T_11 = io_in[12] ? 4'hd : _hotValue_T_10; // @[Mux.scala 47:70]
-  wire [3:0] _hotValue_T_12 = io_in[13] ? 4'he : _hotValue_T_11; // @[Mux.scala 47:70]
-  wire [3:0] _hotValue_T_13 = io_in[14] ? 4'hf : _hotValue_T_12; // @[Mux.scala 47:70]
-  wire [4:0] _hotValue_T_14 = io_in[15] ? 5'h10 : {{1'd0}, _hotValue_T_13}; // @[Mux.scala 47:70]
-  wire [4:0] _hotValue_T_15 = io_in[16] ? 5'h11 : _hotValue_T_14; // @[Mux.scala 47:70]
-  wire [4:0] _hotValue_T_16 = io_in[17] ? 5'h12 : _hotValue_T_15; // @[Mux.scala 47:70]
-  wire [4:0] _hotValue_T_17 = io_in[18] ? 5'h13 : _hotValue_T_16; // @[Mux.scala 47:70]
-  wire [4:0] _hotValue_T_18 = io_in[19] ? 5'h14 : _hotValue_T_17; // @[Mux.scala 47:70]
-  wire [4:0] _hotValue_T_19 = io_in[20] ? 5'h15 : _hotValue_T_18; // @[Mux.scala 47:70]
-  wire [4:0] _hotValue_T_20 = io_in[21] ? 5'h16 : _hotValue_T_19; // @[Mux.scala 47:70]
-  wire [4:0] _hotValue_T_21 = io_in[22] ? 5'h17 : _hotValue_T_20; // @[Mux.scala 47:70]
-  assign io_out = io_in[23] ? 5'h18 : _hotValue_T_21; // @[Mux.scala 47:70]
-endmodule
-module FP_adder(
-  input         clock,
-  input         reset,
-  input  [31:0] io_in_a,
-  input  [31:0] io_in_b,
-  output [31:0] io_out_s
-);
-`ifdef RANDOMIZE_REG_INIT
-  reg [31:0] _RAND_0;
-`endif // RANDOMIZE_REG_INIT
-  wire [7:0] subber_io_in_a; // @[FloatingPointDesigns.scala 82:24]
-  wire [7:0] subber_io_in_b; // @[FloatingPointDesigns.scala 82:24]
-  wire [7:0] subber_io_out_s; // @[FloatingPointDesigns.scala 82:24]
-  wire  subber_io_out_c; // @[FloatingPointDesigns.scala 82:24]
-  wire [7:0] complement_io_in; // @[FloatingPointDesigns.scala 88:28]
-  wire [7:0] complement_io_out; // @[FloatingPointDesigns.scala 88:28]
-  wire [23:0] adder_io_in_a; // @[FloatingPointDesigns.scala 92:23]
-  wire [23:0] adder_io_in_b; // @[FloatingPointDesigns.scala 92:23]
-  wire [23:0] adder_io_out_s; // @[FloatingPointDesigns.scala 92:23]
-  wire  adder_io_out_c; // @[FloatingPointDesigns.scala 92:23]
-  wire [23:0] complementN_0_io_in; // @[FloatingPointDesigns.scala 98:31]
-  wire [23:0] complementN_0_io_out; // @[FloatingPointDesigns.scala 98:31]
-  wire [23:0] complementN_1_io_in; // @[FloatingPointDesigns.scala 100:31]
-  wire [23:0] complementN_1_io_out; // @[FloatingPointDesigns.scala 100:31]
-  wire [23:0] shifter_io_in_a; // @[FloatingPointDesigns.scala 104:25]
-  wire [4:0] shifter_io_in_b; // @[FloatingPointDesigns.scala 104:25]
-  wire [23:0] shifter_io_out_s; // @[FloatingPointDesigns.scala 104:25]
-  wire [23:0] complementN_2_io_in; // @[FloatingPointDesigns.scala 149:31]
-  wire [23:0] complementN_2_io_out; // @[FloatingPointDesigns.scala 149:31]
-  wire [23:0] leadingOneFinder_io_in; // @[FloatingPointDesigns.scala 169:34]
-  wire [4:0] leadingOneFinder_io_out; // @[FloatingPointDesigns.scala 169:34]
-  wire [7:0] subber2_io_in_a; // @[FloatingPointDesigns.scala 171:25]
-  wire [7:0] subber2_io_in_b; // @[FloatingPointDesigns.scala 171:25]
-  wire [7:0] subber2_io_out_s; // @[FloatingPointDesigns.scala 171:25]
-  wire  subber2_io_out_c; // @[FloatingPointDesigns.scala 171:25]
-  wire  sign_0 = io_in_a[31]; // @[FloatingPointDesigns.scala 44:23]
-  wire  sign_1 = io_in_b[31]; // @[FloatingPointDesigns.scala 45:23]
-  wire [8:0] _T_2 = 9'h100 - 9'h2; // @[FloatingPointDesigns.scala 49:62]
-  wire [8:0] _GEN_31 = {{1'd0}, io_in_a[30:23]}; // @[FloatingPointDesigns.scala 49:34]
-  wire [8:0] _GEN_0 = _GEN_31 > _T_2 ? _T_2 : {{1'd0}, io_in_a[30:23]}; // @[FloatingPointDesigns.scala 49:68 50:14 52:14]
-  wire [8:0] _GEN_32 = {{1'd0}, io_in_b[30:23]}; // @[FloatingPointDesigns.scala 54:34]
-  wire [8:0] _GEN_1 = _GEN_32 > _T_2 ? _T_2 : {{1'd0}, io_in_b[30:23]}; // @[FloatingPointDesigns.scala 54:68 55:14 57:14]
-  wire [22:0] frac_0 = io_in_a[22:0]; // @[FloatingPointDesigns.scala 62:23]
-  wire [22:0] frac_1 = io_in_b[22:0]; // @[FloatingPointDesigns.scala 63:23]
-  wire [23:0] whole_frac_0 = {1'h1,frac_0}; // @[FloatingPointDesigns.scala 67:26]
-  wire [23:0] whole_frac_1 = {1'h1,frac_1}; // @[FloatingPointDesigns.scala 68:26]
-  wire [7:0] exp_1 = _GEN_1[7:0]; // @[FloatingPointDesigns.scala 48:19]
-  wire [7:0] exp_0 = _GEN_0[7:0]; // @[FloatingPointDesigns.scala 48:19]
-  wire [7:0] out_exp = subber_io_out_c ? exp_1 : exp_0; // @[FloatingPointDesigns.scala 110:34 111:15 121:15]
-  wire [7:0] sub_exp = subber_io_out_c ? complement_io_out : subber_io_out_s; // @[FloatingPointDesigns.scala 110:34 112:15 122:15]
-  wire  out_s = subber_io_out_c ? sign_1 : sign_0; // @[FloatingPointDesigns.scala 110:34 113:13 123:13]
-  wire [22:0] out_frac = subber_io_out_c ? frac_1 : frac_0; // @[FloatingPointDesigns.scala 110:34 114:16 124:16]
-  wire [23:0] _GEN_8 = subber_io_out_c ? shifter_io_out_s : whole_frac_0; // @[FloatingPointDesigns.scala 110:34 118:21 93:19]
-  wire [23:0] _GEN_9 = subber_io_out_c ? whole_frac_1 : shifter_io_out_s; // @[FloatingPointDesigns.scala 110:34 94:19 128:21]
-  wire  _new_s_T = ~adder_io_out_c; // @[FloatingPointDesigns.scala 144:15]
-  wire  _D_T_1 = sign_0 ^ sign_1; // @[FloatingPointDesigns.scala 157:39]
-  wire  D = _new_s_T | sign_0 ^ sign_1; // @[FloatingPointDesigns.scala 157:28]
-  wire  E = _new_s_T & ~adder_io_out_s[23] | _new_s_T & ~_D_T_1 | adder_io_out_c & adder_io_out_s[23] & _D_T_1; // @[FloatingPointDesigns.scala 160:99]
-  wire  _GEN_25 = sub_exp >= 8'h17 ? out_s : ~adder_io_out_c & sign_0 | sign_0 & sign_1 | ~adder_io_out_c & sign_1; // @[FloatingPointDesigns.scala 144:11 179:39 180:13]
-  wire  new_s = io_in_a[30:0] == 31'h0 & io_in_b[30:0] == 31'h0 ? 1'h0 : _GEN_25; // @[FloatingPointDesigns.scala 175:62 176:13]
-  wire [23:0] adder_result = new_s & sign_0 != sign_1 ? complementN_2_io_out : adder_io_out_s; // @[FloatingPointDesigns.scala 163:18 164:47 165:20]
-  wire [4:0] _subber2_io_in_b_T_1 = 5'h18 - leadingOneFinder_io_out; // @[FloatingPointDesigns.scala 173:42]
-  wire [8:0] _GEN_33 = {{1'd0}, out_exp}; // @[FloatingPointDesigns.scala 187:20]
-  wire [23:0] _new_out_frac_T_2 = 24'h800000 - 24'h1; // @[FloatingPointDesigns.scala 189:51]
-  wire [7:0] _new_out_exp_T_3 = out_exp + 8'h1; // @[FloatingPointDesigns.scala 191:32]
-  wire [8:0] _GEN_13 = _GEN_33 == _T_2 ? _T_2 : {{1'd0}, _new_out_exp_T_3}; // @[FloatingPointDesigns.scala 187:56 188:21 191:21]
-  wire [23:0] _GEN_14 = _GEN_33 == _T_2 ? _new_out_frac_T_2 : {{1'd0}, adder_result[23:1]}; // @[FloatingPointDesigns.scala 187:56 189:22 192:22]
-  wire [53:0] _GEN_2 = {{31'd0}, adder_result[22:0]}; // @[FloatingPointDesigns.scala 203:57]
-  wire [53:0] _new_out_frac_T_7 = _GEN_2 << _subber2_io_in_b_T_1; // @[FloatingPointDesigns.scala 203:57]
-  wire [7:0] _GEN_15 = subber2_io_out_c ? 8'h1 : subber2_io_out_s; // @[FloatingPointDesigns.scala 198:39 199:23 202:23]
-  wire [53:0] _GEN_16 = subber2_io_out_c ? 54'h400000 : _new_out_frac_T_7; // @[FloatingPointDesigns.scala 198:39 200:24 203:24]
-  wire [7:0] _GEN_17 = leadingOneFinder_io_out == 5'h1 & adder_result == 24'h0 & (_D_T_1 & io_in_a[30:0] == io_in_b[30:0
-    ]) ? 8'h0 : _GEN_15; // @[FloatingPointDesigns.scala 195:141 196:21]
-  wire [53:0] _GEN_18 = leadingOneFinder_io_out == 5'h1 & adder_result == 24'h0 & (_D_T_1 & io_in_a[30:0] == io_in_b[30:
-    0]) ? 54'h0 : _GEN_16; // @[FloatingPointDesigns.scala 195:141 145:18]
-  wire [7:0] _GEN_19 = D ? _GEN_17 : 8'h0; // @[FloatingPointDesigns.scala 146:17 194:26]
-  wire [53:0] _GEN_20 = D ? _GEN_18 : 54'h0; // @[FloatingPointDesigns.scala 145:18 194:26]
-  wire [8:0] _GEN_21 = ~D ? _GEN_13 : {{1'd0}, _GEN_19}; // @[FloatingPointDesigns.scala 186:26]
-  wire [53:0] _GEN_22 = ~D ? {{30'd0}, _GEN_14} : _GEN_20; // @[FloatingPointDesigns.scala 186:26]
-  wire [8:0] _GEN_23 = E ? {{1'd0}, out_exp} : _GEN_21; // @[FloatingPointDesigns.scala 183:26 184:19]
-  wire [53:0] _GEN_24 = E ? {{31'd0}, adder_result[22:0]} : _GEN_22; // @[FloatingPointDesigns.scala 183:26 185:20]
-  wire [53:0] _GEN_26 = sub_exp >= 8'h17 ? {{31'd0}, out_frac} : _GEN_24; // @[FloatingPointDesigns.scala 179:39 181:20]
-  wire [8:0] _GEN_27 = sub_exp >= 8'h17 ? {{1'd0}, out_exp} : _GEN_23; // @[FloatingPointDesigns.scala 179:39 182:19]
-  wire [8:0] _GEN_29 = io_in_a[30:0] == 31'h0 & io_in_b[30:0] == 31'h0 ? 9'h0 : _GEN_27; // @[FloatingPointDesigns.scala 175:62 177:19]
-  wire [53:0] _GEN_30 = io_in_a[30:0] == 31'h0 & io_in_b[30:0] == 31'h0 ? 54'h0 : _GEN_26; // @[FloatingPointDesigns.scala 175:62 178:20]
-  reg [31:0] reg_out_s; // @[FloatingPointDesigns.scala 207:28]
-  wire [7:0] new_out_exp = _GEN_29[7:0]; // @[FloatingPointDesigns.scala 143:27]
-  wire [22:0] new_out_frac = _GEN_30[22:0]; // @[FloatingPointDesigns.scala 142:28]
-  wire [31:0] _reg_out_s_T_1 = {new_s,new_out_exp,new_out_frac}; // @[FloatingPointDesigns.scala 209:39]
-  full_subber subber ( // @[FloatingPointDesigns.scala 82:24]
-    .io_in_a(subber_io_in_a),
-    .io_in_b(subber_io_in_b),
-    .io_out_s(subber_io_out_s),
-    .io_out_c(subber_io_out_c)
-  );
-  twoscomplement complement ( // @[FloatingPointDesigns.scala 88:28]
-    .io_in(complement_io_in),
-    .io_out(complement_io_out)
-  );
-  full_adder adder ( // @[FloatingPointDesigns.scala 92:23]
-    .io_in_a(adder_io_in_a),
-    .io_in_b(adder_io_in_b),
-    .io_out_s(adder_io_out_s),
-    .io_out_c(adder_io_out_c)
-  );
-  twoscomplement_1 complementN_0 ( // @[FloatingPointDesigns.scala 98:31]
-    .io_in(complementN_0_io_in),
-    .io_out(complementN_0_io_out)
-  );
-  twoscomplement_1 complementN_1 ( // @[FloatingPointDesigns.scala 100:31]
-    .io_in(complementN_1_io_in),
-    .io_out(complementN_1_io_out)
-  );
-  shifter shifter ( // @[FloatingPointDesigns.scala 104:25]
-    .io_in_a(shifter_io_in_a),
-    .io_in_b(shifter_io_in_b),
-    .io_out_s(shifter_io_out_s)
-  );
-  twoscomplement_1 complementN_2 ( // @[FloatingPointDesigns.scala 149:31]
-    .io_in(complementN_2_io_in),
-    .io_out(complementN_2_io_out)
-  );
-  leadingOneDetector leadingOneFinder ( // @[FloatingPointDesigns.scala 169:34]
-    .io_in(leadingOneFinder_io_in),
-    .io_out(leadingOneFinder_io_out)
-  );
-  full_subber subber2 ( // @[FloatingPointDesigns.scala 171:25]
-    .io_in_a(subber2_io_in_a),
-    .io_in_b(subber2_io_in_b),
-    .io_out_s(subber2_io_out_s),
-    .io_out_c(subber2_io_out_c)
-  );
-  assign io_out_s = reg_out_s; // @[FloatingPointDesigns.scala 211:14]
-  assign subber_io_in_a = _GEN_0[7:0]; // @[FloatingPointDesigns.scala 48:19]
-  assign subber_io_in_b = _GEN_1[7:0]; // @[FloatingPointDesigns.scala 48:19]
-  assign complement_io_in = subber_io_out_s; // @[FloatingPointDesigns.scala 89:22]
-  assign adder_io_in_a = sign_0 & ~sign_1 ? complementN_0_io_out : _GEN_8; // @[FloatingPointDesigns.scala 133:45 134:21]
-  assign adder_io_in_b = sign_1 & ~sign_0 ? complementN_1_io_out : _GEN_9; // @[FloatingPointDesigns.scala 137:45 138:21]
-  assign complementN_0_io_in = subber_io_out_c ? shifter_io_out_s : whole_frac_0; // @[FloatingPointDesigns.scala 110:34 118:21 93:19]
-  assign complementN_1_io_in = subber_io_out_c ? whole_frac_1 : shifter_io_out_s; // @[FloatingPointDesigns.scala 110:34 94:19 128:21]
-  assign shifter_io_in_a = subber_io_out_c ? whole_frac_0 : whole_frac_1; // @[FloatingPointDesigns.scala 110:34 115:23 125:23]
-  assign shifter_io_in_b = sub_exp[4:0];
-  assign complementN_2_io_in = adder_io_out_s; // @[FloatingPointDesigns.scala 150:25]
-  assign leadingOneFinder_io_in = new_s & sign_0 != sign_1 ? complementN_2_io_out : adder_io_out_s; // @[FloatingPointDesigns.scala 163:18 164:47 165:20]
-  assign subber2_io_in_a = subber_io_out_c ? exp_1 : exp_0; // @[FloatingPointDesigns.scala 110:34 111:15 121:15]
-  assign subber2_io_in_b = {{3'd0}, _subber2_io_in_b_T_1}; // @[FloatingPointDesigns.scala 173:21]
-  always @(posedge clock) begin
-    if (reset) begin // @[FloatingPointDesigns.scala 207:28]
-      reg_out_s <= 32'h0; // @[FloatingPointDesigns.scala 207:28]
-    end else begin
-      reg_out_s <= _reg_out_s_T_1; // @[FloatingPointDesigns.scala 209:15]
-    end
-  end
-// Register and memory initialization
-`ifdef RANDOMIZE_GARBAGE_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_INVALID_ASSIGN
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_REG_INIT
-`define RANDOMIZE
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-`define RANDOMIZE
-`endif
-`ifndef RANDOM
-`define RANDOM $random
-`endif
-`ifdef RANDOMIZE_MEM_INIT
-  integer initvar;
-`endif
-`ifndef SYNTHESIS
-`ifdef FIRRTL_BEFORE_INITIAL
-`FIRRTL_BEFORE_INITIAL
-`endif
-initial begin
-  `ifdef RANDOMIZE
-    `ifdef INIT_RANDOM
-      `INIT_RANDOM
-    `endif
-    `ifndef VERILATOR
-      `ifdef RANDOMIZE_DELAY
-        #`RANDOMIZE_DELAY begin end
-      `else
-        #0.002 begin end
-      `endif
-    `endif
-`ifdef RANDOMIZE_REG_INIT
-  _RAND_0 = {1{`RANDOM}};
-  reg_out_s = _RAND_0[31:0];
-`endif // RANDOMIZE_REG_INIT
-  `endif // RANDOMIZE
-end // initial
-`ifdef FIRRTL_AFTER_INITIAL
-`FIRRTL_AFTER_INITIAL
-`endif
-`endif // SYNTHESIS
-endmodule
-module AdderSubber(
-  input         clock,
-  input         reset,
-  input  [31:0] io_in_a,
-  input  [31:0] io_in_b,
-  input         io_in_sel,
-  output [31:0] io_out_s
-);
-  wire  adder_clock; // @[TestCORDIC.scala 82:39]
-  wire  adder_reset; // @[TestCORDIC.scala 82:39]
-  wire [31:0] adder_io_in_a; // @[TestCORDIC.scala 82:39]
-  wire [31:0] adder_io_in_b; // @[TestCORDIC.scala 82:39]
-  wire [31:0] adder_io_out_s; // @[TestCORDIC.scala 82:39]
-  wire  _adder_io_in_b_T_4 = ~io_in_sel ? io_in_b[31] : ~io_in_b[31]; // @[TestCORDIC.scala 85:23]
-  FP_adder adder ( // @[TestCORDIC.scala 82:39]
-    .clock(adder_clock),
-    .reset(adder_reset),
-    .io_in_a(adder_io_in_a),
-    .io_in_b(adder_io_in_b),
-    .io_out_s(adder_io_out_s)
-  );
-  assign io_out_s = adder_io_out_s; // @[TestCORDIC.scala 87:12]
-  assign adder_clock = clock;
-  assign adder_reset = reset;
-  assign adder_io_in_a = io_in_a; // @[TestCORDIC.scala 84:17]
-  assign adder_io_in_b = {_adder_io_in_b_T_4,io_in_b[30:0]}; // @[TestCORDIC.scala 85:79]
-endmodule
-module full_subber_5(
-  input  [22:0] io_in_a,
-  input  [22:0] io_in_b,
-  output        io_out_c
-);
-  wire [23:0] _result_T = io_in_a - io_in_b; // @[BinaryDesigns.scala 69:23]
-  wire [24:0] _result_T_2 = _result_T - 24'h0; // @[BinaryDesigns.scala 69:34]
-  wire [23:0] result = _result_T_2[23:0]; // @[BinaryDesigns.scala 68:22 69:12]
-  assign io_out_c = result[23]; // @[BinaryDesigns.scala 71:23]
-endmodule
-module FP_comparator(
-  input  [31:0] io_in_a,
-  input  [31:0] io_in_b,
-  output [31:0] io_out_s
-);
-  wire [7:0] full_subber_io_in_a; // @[FloatingPointDesigns.scala 976:24]
-  wire [7:0] full_subber_io_in_b; // @[FloatingPointDesigns.scala 976:24]
-  wire [7:0] full_subber_io_out_s; // @[FloatingPointDesigns.scala 976:24]
-  wire  full_subber_io_out_c; // @[FloatingPointDesigns.scala 976:24]
-  wire [22:0] full_subber_1_io_in_a; // @[FloatingPointDesigns.scala 981:25]
-  wire [22:0] full_subber_1_io_in_b; // @[FloatingPointDesigns.scala 981:25]
-  wire  full_subber_1_io_out_c; // @[FloatingPointDesigns.scala 981:25]
-  wire [8:0] _T_2 = 9'h100 - 9'h2; // @[FloatingPointDesigns.scala 955:62]
-  wire [8:0] _GEN_5 = {{1'd0}, io_in_a[30:23]}; // @[FloatingPointDesigns.scala 955:34]
-  wire [8:0] _GEN_0 = _GEN_5 > _T_2 ? _T_2 : {{1'd0}, io_in_a[30:23]}; // @[FloatingPointDesigns.scala 955:68 956:14 958:14]
-  wire [8:0] _GEN_6 = {{1'd0}, io_in_b[30:23]}; // @[FloatingPointDesigns.scala 960:34]
-  wire [8:0] _GEN_1 = _GEN_6 > _T_2 ? _T_2 : {{1'd0}, io_in_b[30:23]}; // @[FloatingPointDesigns.scala 960:68 961:14 963:14]
-  wire [31:0] _GEN_2 = full_subber_1_io_out_c ? io_in_b : io_in_a; // @[FloatingPointDesigns.scala 991:34 992:18 994:18]
-  wire [31:0] _GEN_3 = full_subber_io_out_s > 8'h0 ? io_in_a : _GEN_2; // @[FloatingPointDesigns.scala 988:35 989:16]
-  full_subber full_subber ( // @[FloatingPointDesigns.scala 976:24]
-    .io_in_a(full_subber_io_in_a),
-    .io_in_b(full_subber_io_in_b),
-    .io_out_s(full_subber_io_out_s),
-    .io_out_c(full_subber_io_out_c)
-  );
-  full_subber_5 full_subber_1 ( // @[FloatingPointDesigns.scala 981:25]
-    .io_in_a(full_subber_1_io_in_a),
-    .io_in_b(full_subber_1_io_in_b),
-    .io_out_c(full_subber_1_io_out_c)
-  );
-  assign io_out_s = full_subber_io_out_c ? io_in_b : _GEN_3; // @[FloatingPointDesigns.scala 986:31 987:16]
-  assign full_subber_io_in_a = _GEN_0[7:0]; // @[FloatingPointDesigns.scala 954:19]
-  assign full_subber_io_in_b = _GEN_1[7:0]; // @[FloatingPointDesigns.scala 954:19]
-  assign full_subber_1_io_in_a = io_in_a[22:0]; // @[FloatingPointDesigns.scala 968:23]
-  assign full_subber_1_io_in_b = io_in_b[22:0]; // @[FloatingPointDesigns.scala 969:23]
-endmodule
-module FloatHalver(
+module FloatToFixed32(
   input  [31:0] io_in,
-  input  [4:0]  io_amt,
   output [31:0] io_out
 );
-  wire [7:0] subber_io_in_a; // @[TestCORDIC.scala 106:30]
-  wire [7:0] subber_io_in_b; // @[TestCORDIC.scala 106:30]
-  wire [7:0] subber_io_out_s; // @[TestCORDIC.scala 106:30]
-  wire  subber_io_out_c; // @[TestCORDIC.scala 106:30]
-  wire [31:0] _io_out_T_4 = {io_in[31],subber_io_out_s,io_in[22:0]}; // @[TestCORDIC.scala 110:70]
-  full_subber subber ( // @[TestCORDIC.scala 106:30]
-    .io_in_a(subber_io_in_a),
-    .io_in_b(subber_io_in_b),
-    .io_out_s(subber_io_out_s),
-    .io_out_c(subber_io_out_c)
+  wire [31:0] frac = {9'h0,io_in[22:0]}; // @[TestCORDIC.scala 15:42]
+  wire [7:0] exp = io_in[30:23]; // @[TestCORDIC.scala 16:25]
+  wire  sign = io_in[31]; // @[TestCORDIC.scala 17:26]
+  wire [7:0] shiftamt = exp - 8'h7f; // @[TestCORDIC.scala 18:37]
+  wire [31:0] _data_T_3 = frac | 32'h800000; // @[TestCORDIC.scala 21:34]
+  wire [36:0] _GEN_0 = {_data_T_3, 5'h0}; // @[TestCORDIC.scala 21:56]
+  wire [38:0] _data_T_4 = {{2'd0}, _GEN_0}; // @[TestCORDIC.scala 21:56]
+  wire [7:0] _data_T_8 = 8'sh0 - $signed(shiftamt); // @[TestCORDIC.scala 21:79]
+  wire [38:0] _data_T_9 = _data_T_4 >> _data_T_8; // @[TestCORDIC.scala 21:64]
+  wire [7:0] _data_T_13 = exp - 8'h7f; // @[TestCORDIC.scala 22:78]
+  wire [293:0] _GEN_1 = {{255'd0}, _data_T_4}; // @[TestCORDIC.scala 22:64]
+  wire [293:0] _data_T_14 = _GEN_1 << _data_T_13; // @[TestCORDIC.scala 22:64]
+  wire [293:0] data = shiftamt[7] ? {{255'd0}, _data_T_9} : _data_T_14; // @[TestCORDIC.scala 20:17]
+  wire [293:0] _io_out_T_3 = 294'h0 - data; // @[TestCORDIC.scala 23:40]
+  wire [293:0] _io_out_T_4 = sign ? _io_out_T_3 : data; // @[TestCORDIC.scala 23:16]
+  assign io_out = _io_out_T_4[31:0]; // @[TestCORDIC.scala 23:10]
+endmodule
+module CLZ32(
+  input  [31:0] io_in,
+  output [4:0]  io_out
+);
+  wire [31:0] _bx_T = io_in & 32'hffff0000; // @[TestCORDIC.scala 34:20]
+  wire  _bx_T_1 = _bx_T == 32'h0; // @[TestCORDIC.scala 34:37]
+  wire [47:0] _bx_T_2 = {io_in, 16'h0}; // @[TestCORDIC.scala 34:49]
+  wire [47:0] bx = _bx_T == 32'h0 ? _bx_T_2 : {{16'd0}, io_in}; // @[TestCORDIC.scala 34:15]
+  wire [47:0] _cx_T = bx & 48'hff000000; // @[TestCORDIC.scala 35:20]
+  wire  _cx_T_1 = _cx_T == 48'h0; // @[TestCORDIC.scala 35:37]
+  wire [55:0] _cx_T_2 = {bx, 8'h0}; // @[TestCORDIC.scala 35:49]
+  wire [55:0] cx = _cx_T == 48'h0 ? _cx_T_2 : {{8'd0}, bx}; // @[TestCORDIC.scala 35:15]
+  wire [55:0] _dx_T = cx & 56'hf0000000; // @[TestCORDIC.scala 36:20]
+  wire  _dx_T_1 = _dx_T == 56'h0; // @[TestCORDIC.scala 36:37]
+  wire [59:0] _dx_T_2 = {cx, 4'h0}; // @[TestCORDIC.scala 36:49]
+  wire [59:0] dx = _dx_T == 56'h0 ? _dx_T_2 : {{4'd0}, cx}; // @[TestCORDIC.scala 36:15]
+  wire [59:0] _ex_T = dx & 60'hc0000000; // @[TestCORDIC.scala 37:20]
+  wire  _ex_T_1 = _ex_T == 60'h0; // @[TestCORDIC.scala 37:37]
+  wire [61:0] _ex_T_2 = {dx, 2'h0}; // @[TestCORDIC.scala 37:49]
+  wire [61:0] ex = _ex_T == 60'h0 ? _ex_T_2 : {{2'd0}, dx}; // @[TestCORDIC.scala 37:15]
+  wire [3:0] _io_out_T_10 = {_bx_T_1,_cx_T_1,_dx_T_1,_ex_T_1}; // @[TestCORDIC.scala 39:112]
+  wire [61:0] _io_out_T_11 = ex & 62'h80000000; // @[TestCORDIC.scala 40:44]
+  assign io_out = {_io_out_T_10,_io_out_T_11 == 62'h0}; // @[TestCORDIC.scala 40:36]
+endmodule
+module FixedToFloat32(
+  input  [31:0] io_in,
+  output [31:0] io_out
+);
+  wire [31:0] clz32_io_in; // @[TestCORDIC.scala 60:21]
+  wire [4:0] clz32_io_out; // @[TestCORDIC.scala 60:21]
+  wire [31:0] _data_T_2 = ~io_in; // @[TestCORDIC.scala 57:35]
+  wire [31:0] _data_T_4 = _data_T_2 + 32'h1; // @[TestCORDIC.scala 57:50]
+  wire [31:0] data = io_in[31] ? _data_T_4 : io_in; // @[TestCORDIC.scala 57:14]
+  wire [3:0] _exp_T_2 = 4'sh4 - 4'sh1; // @[TestCORDIC.scala 64:16]
+  wire [4:0] _GEN_0 = {{1{_exp_T_2[3]}},_exp_T_2}; // @[TestCORDIC.scala 64:23]
+  wire [4:0] _exp_T_6 = $signed(_GEN_0) - $signed(clz32_io_out); // @[TestCORDIC.scala 64:23]
+  wire [7:0] _GEN_1 = {{3{_exp_T_6[4]}},_exp_T_6}; // @[TestCORDIC.scala 64:46]
+  wire [4:0] _frac_T_1 = clz32_io_out + 5'h1; // @[TestCORDIC.scala 65:42]
+  wire [62:0] _GEN_2 = {{31'd0}, data}; // @[TestCORDIC.scala 65:18]
+  wire [62:0] _frac_T_2 = _GEN_2 << _frac_T_1; // @[TestCORDIC.scala 65:18]
+  wire [5:0] _frac_T_4 = 6'h20 - 6'h17; // @[TestCORDIC.scala 65:60]
+  wire [62:0] _frac_T_5 = _frac_T_2 >> _frac_T_4; // @[TestCORDIC.scala 65:51]
+  wire [7:0] _io_out_T_1 = $signed(_GEN_1) + 8'sh7f; // @[TestCORDIC.scala 67:30]
+  wire [8:0] _io_out_T_2 = {io_in[31],_io_out_T_1}; // @[TestCORDIC.scala 67:23]
+  wire [63:0] frac = {{1'd0}, _frac_T_5}; // @[TestCORDIC.scala 54:18 65:8]
+  CLZ32 clz32 ( // @[TestCORDIC.scala 60:21]
+    .io_in(clz32_io_in),
+    .io_out(clz32_io_out)
   );
-  assign io_out = io_in == 32'h0 ? 32'h0 : _io_out_T_4; // @[TestCORDIC.scala 110:16]
-  assign subber_io_in_a = io_in[30:23]; // @[TestCORDIC.scala 108:26]
-  assign subber_io_in_b = {{3'd0}, io_amt}; // @[TestCORDIC.scala 109:18]
+  assign io_out = {_io_out_T_2,frac[22:0]}; // @[TestCORDIC.scala 67:37]
+  assign clz32_io_in = io_in[31] ? _data_T_4 : io_in; // @[TestCORDIC.scala 57:14]
 endmodule
 module CORDIC(
   input         clock,
@@ -498,10 +79,7 @@ module CORDIC(
   input  [31:0] io_in_z0,
   output [31:0] io_out_x,
   output [31:0] io_out_y,
-  output [31:0] io_out_z,
-  output        io_out_output_ready,
-  output        io_out_pipe_ready,
-  output [31:0] io_out_pipeline_count
+  output [31:0] io_out_z
 );
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
@@ -516,208 +94,1349 @@ module CORDIC(
   reg [31:0] _RAND_9;
   reg [31:0] _RAND_10;
   reg [31:0] _RAND_11;
+  reg [31:0] _RAND_12;
+  reg [31:0] _RAND_13;
+  reg [31:0] _RAND_14;
+  reg [31:0] _RAND_15;
+  reg [31:0] _RAND_16;
+  reg [31:0] _RAND_17;
+  reg [31:0] _RAND_18;
+  reg [31:0] _RAND_19;
+  reg [31:0] _RAND_20;
+  reg [31:0] _RAND_21;
+  reg [31:0] _RAND_22;
+  reg [31:0] _RAND_23;
+  reg [31:0] _RAND_24;
+  reg [31:0] _RAND_25;
+  reg [31:0] _RAND_26;
+  reg [31:0] _RAND_27;
+  reg [31:0] _RAND_28;
+  reg [31:0] _RAND_29;
+  reg [31:0] _RAND_30;
+  reg [31:0] _RAND_31;
+  reg [31:0] _RAND_32;
+  reg [31:0] _RAND_33;
+  reg [31:0] _RAND_34;
+  reg [31:0] _RAND_35;
+  reg [31:0] _RAND_36;
+  reg [31:0] _RAND_37;
+  reg [31:0] _RAND_38;
+  reg [31:0] _RAND_39;
+  reg [31:0] _RAND_40;
+  reg [31:0] _RAND_41;
+  reg [31:0] _RAND_42;
+  reg [31:0] _RAND_43;
+  reg [31:0] _RAND_44;
+  reg [31:0] _RAND_45;
+  reg [31:0] _RAND_46;
+  reg [31:0] _RAND_47;
+  reg [31:0] _RAND_48;
+  reg [31:0] _RAND_49;
+  reg [31:0] _RAND_50;
+  reg [31:0] _RAND_51;
+  reg [31:0] _RAND_52;
+  reg [31:0] _RAND_53;
+  reg [31:0] _RAND_54;
+  reg [31:0] _RAND_55;
+  reg [31:0] _RAND_56;
+  reg [31:0] _RAND_57;
+  reg [31:0] _RAND_58;
+  reg [31:0] _RAND_59;
+  reg [31:0] _RAND_60;
+  reg [31:0] _RAND_61;
+  reg [31:0] _RAND_62;
+  reg [31:0] _RAND_63;
+  reg [31:0] _RAND_64;
+  reg [31:0] _RAND_65;
+  reg [31:0] _RAND_66;
+  reg [31:0] _RAND_67;
+  reg [31:0] _RAND_68;
+  reg [31:0] _RAND_69;
+  reg [31:0] _RAND_70;
+  reg [31:0] _RAND_71;
+  reg [31:0] _RAND_72;
+  reg [31:0] _RAND_73;
+  reg [31:0] _RAND_74;
+  reg [31:0] _RAND_75;
+  reg [31:0] _RAND_76;
+  reg [31:0] _RAND_77;
+  reg [31:0] _RAND_78;
+  reg [31:0] _RAND_79;
+  reg [31:0] _RAND_80;
+  reg [31:0] _RAND_81;
+  reg [31:0] _RAND_82;
+  reg [31:0] _RAND_83;
+  reg [31:0] _RAND_84;
+  reg [31:0] _RAND_85;
+  reg [31:0] _RAND_86;
+  reg [31:0] _RAND_87;
+  reg [31:0] _RAND_88;
+  reg [31:0] _RAND_89;
+  reg [31:0] _RAND_90;
+  reg [31:0] _RAND_91;
+  reg [31:0] _RAND_92;
+  reg [31:0] _RAND_93;
+  reg [31:0] _RAND_94;
+  reg [31:0] _RAND_95;
+  reg [31:0] _RAND_96;
+  reg [31:0] _RAND_97;
+  reg [31:0] _RAND_98;
+  reg [31:0] _RAND_99;
+  reg [31:0] _RAND_100;
+  reg [31:0] _RAND_101;
+  reg [31:0] _RAND_102;
+  reg [31:0] _RAND_103;
+  reg [31:0] _RAND_104;
+  reg [31:0] _RAND_105;
+  reg [31:0] _RAND_106;
+  reg [31:0] _RAND_107;
+  reg [31:0] _RAND_108;
+  reg [31:0] _RAND_109;
+  reg [31:0] _RAND_110;
+  reg [31:0] _RAND_111;
+  reg [31:0] _RAND_112;
+  reg [31:0] _RAND_113;
+  reg [31:0] _RAND_114;
+  reg [31:0] _RAND_115;
+  reg [31:0] _RAND_116;
+  reg [31:0] _RAND_117;
+  reg [31:0] _RAND_118;
+  reg [31:0] _RAND_119;
+  reg [31:0] _RAND_120;
+  reg [31:0] _RAND_121;
+  reg [31:0] _RAND_122;
+  reg [31:0] _RAND_123;
+  reg [31:0] _RAND_124;
+  reg [31:0] _RAND_125;
 `endif // RANDOMIZE_REG_INIT
-  wire  controller_clock; // @[TestCORDIC.scala 161:34]
-  wire  controller_reset; // @[TestCORDIC.scala 161:34]
-  wire  controller_io_out_output_rdy; // @[TestCORDIC.scala 161:34]
-  wire  controller_io_out_pipe_rdy; // @[TestCORDIC.scala 161:34]
-  wire [31:0] controller_io_out_pipeline_count; // @[TestCORDIC.scala 161:34]
-  wire [31:0] rom_io_atanout; // @[TestCORDIC.scala 166:27]
-  wire [5:0] rom_io_atanselect; // @[TestCORDIC.scala 166:27]
-  wire  xadder_clock; // @[TestCORDIC.scala 174:30]
-  wire  xadder_reset; // @[TestCORDIC.scala 174:30]
-  wire [31:0] xadder_io_in_a; // @[TestCORDIC.scala 174:30]
-  wire [31:0] xadder_io_in_b; // @[TestCORDIC.scala 174:30]
-  wire  xadder_io_in_sel; // @[TestCORDIC.scala 174:30]
-  wire [31:0] xadder_io_out_s; // @[TestCORDIC.scala 174:30]
-  wire  yadder_clock; // @[TestCORDIC.scala 175:30]
-  wire  yadder_reset; // @[TestCORDIC.scala 175:30]
-  wire [31:0] yadder_io_in_a; // @[TestCORDIC.scala 175:30]
-  wire [31:0] yadder_io_in_b; // @[TestCORDIC.scala 175:30]
-  wire  yadder_io_in_sel; // @[TestCORDIC.scala 175:30]
-  wire [31:0] yadder_io_out_s; // @[TestCORDIC.scala 175:30]
-  wire [31:0] floatcmp_io_in_a; // @[TestCORDIC.scala 195:32]
-  wire [31:0] floatcmp_io_in_b; // @[TestCORDIC.scala 195:32]
-  wire [31:0] floatcmp_io_out_s; // @[TestCORDIC.scala 195:32]
-  wire [31:0] yhalver_io_in; // @[TestCORDIC.scala 199:31]
-  wire [4:0] yhalver_io_amt; // @[TestCORDIC.scala 199:31]
-  wire [31:0] yhalver_io_out; // @[TestCORDIC.scala 199:31]
-  wire [31:0] xhalver_io_in; // @[TestCORDIC.scala 200:31]
-  wire [4:0] xhalver_io_amt; // @[TestCORDIC.scala 200:31]
-  wire [31:0] xhalver_io_out; // @[TestCORDIC.scala 200:31]
-  wire  theta_addersubber_clock; // @[TestCORDIC.scala 217:41]
-  wire  theta_addersubber_reset; // @[TestCORDIC.scala 217:41]
-  wire [31:0] theta_addersubber_io_in_a; // @[TestCORDIC.scala 217:41]
-  wire [31:0] theta_addersubber_io_in_b; // @[TestCORDIC.scala 217:41]
-  wire  theta_addersubber_io_in_sel; // @[TestCORDIC.scala 217:41]
-  wire [31:0] theta_addersubber_io_out_s; // @[TestCORDIC.scala 217:41]
-  reg [31:0] x_0; // @[TestCORDIC.scala 155:26]
-  reg [31:0] x_2; // @[TestCORDIC.scala 155:26]
-  reg [31:0] y_0; // @[TestCORDIC.scala 156:26]
-  reg [31:0] y_2; // @[TestCORDIC.scala 156:26]
-  reg [31:0] z_0; // @[TestCORDIC.scala 157:26]
-  reg [31:0] z_1; // @[TestCORDIC.scala 157:26]
-  reg [31:0] z_2; // @[TestCORDIC.scala 157:26]
-  reg [31:0] theta_0; // @[TestCORDIC.scala 158:30]
-  reg [31:0] theta_2; // @[TestCORDIC.scala 158:30]
-  reg [31:0] cnt_0; // @[TestCORDIC.scala 159:28]
-  reg [31:0] cnt_1; // @[TestCORDIC.scala 159:28]
-  reg [31:0] cnt_2; // @[TestCORDIC.scala 159:28]
-  wire  _x_0_T = controller_io_out_pipe_rdy; // @[TestCORDIC.scala 177:42]
-  wire [31:0] _cnt_0_T_2 = cnt_2 + 32'h1; // @[TestCORDIC.scala 181:60]
-  wire  _xadder_io_in_b_T = floatcmp_io_out_s == theta_0; // @[TestCORDIC.scala 208:43]
-  wire  _xadder_io_in_b_T_4 = floatcmp_io_out_s == theta_0 ? ~yhalver_io_out[31] : yhalver_io_out[31]; // @[TestCORDIC.scala 208:24]
-  wire  _yadder_io_in_a_T_4 = _xadder_io_in_b_T ? ~xhalver_io_out[31] : xhalver_io_out[31]; // @[TestCORDIC.scala 212:24]
-  CORDIC_Controller controller ( // @[TestCORDIC.scala 161:34]
-    .clock(controller_clock),
-    .reset(controller_reset),
-    .io_out_output_rdy(controller_io_out_output_rdy),
-    .io_out_pipe_rdy(controller_io_out_pipe_rdy),
-    .io_out_pipeline_count(controller_io_out_pipeline_count)
+  wire [31:0] tofixedx0_io_in; // @[TestCORDIC.scala 187:25]
+  wire [31:0] tofixedx0_io_out; // @[TestCORDIC.scala 187:25]
+  wire [31:0] tofixedy0_io_in; // @[TestCORDIC.scala 188:25]
+  wire [31:0] tofixedy0_io_out; // @[TestCORDIC.scala 188:25]
+  wire [31:0] tofixedz0_io_in; // @[TestCORDIC.scala 189:25]
+  wire [31:0] tofixedz0_io_out; // @[TestCORDIC.scala 189:25]
+  wire [31:0] tofloatxout_io_in; // @[TestCORDIC.scala 222:27]
+  wire [31:0] tofloatxout_io_out; // @[TestCORDIC.scala 222:27]
+  wire [31:0] tofloatyout_io_in; // @[TestCORDIC.scala 223:27]
+  wire [31:0] tofloatyout_io_out; // @[TestCORDIC.scala 223:27]
+  wire [31:0] tofloatzout_io_in; // @[TestCORDIC.scala 224:27]
+  wire [31:0] tofloatzout_io_out; // @[TestCORDIC.scala 224:27]
+  reg [31:0] x_0; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_1; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_2; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_3; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_4; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_5; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_6; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_7; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_8; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_9; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_10; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_11; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_12; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_13; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_14; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_15; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_16; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_17; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_18; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_19; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_20; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_21; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_22; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_23; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_24; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_25; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_26; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_27; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_28; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_29; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_30; // @[TestCORDIC.scala 194:18]
+  reg [31:0] x_31; // @[TestCORDIC.scala 194:18]
+  reg [31:0] y_0; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_1; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_2; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_3; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_4; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_5; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_6; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_7; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_8; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_9; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_10; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_11; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_12; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_13; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_14; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_15; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_16; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_17; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_18; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_19; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_20; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_21; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_22; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_23; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_24; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_25; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_26; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_27; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_28; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_29; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_30; // @[TestCORDIC.scala 195:18]
+  reg [31:0] y_31; // @[TestCORDIC.scala 195:18]
+  reg [31:0] theta_1; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_2; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_3; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_4; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_5; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_6; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_7; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_8; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_9; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_10; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_11; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_12; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_13; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_14; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_15; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_16; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_17; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_18; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_19; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_20; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_21; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_22; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_23; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_24; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_25; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_26; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_27; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_28; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_29; // @[TestCORDIC.scala 196:22]
+  reg [31:0] theta_30; // @[TestCORDIC.scala 196:22]
+  reg [31:0] z0s_0; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_1; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_2; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_3; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_4; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_5; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_6; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_7; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_8; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_9; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_10; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_11; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_12; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_13; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_14; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_15; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_16; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_17; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_18; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_19; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_20; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_21; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_22; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_23; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_24; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_25; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_26; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_27; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_28; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_29; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_30; // @[TestCORDIC.scala 197:20]
+  reg [31:0] z0s_31; // @[TestCORDIC.scala 197:20]
+  wire  _fxxterm_T = 32'sh0 > $signed(z0s_0); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_3 = 32'sh0 - $signed(x_0); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm = 32'sh0 > $signed(z0s_0) ? $signed(_fxxterm_T_3) : $signed(x_0); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_3 = 32'sh0 - $signed(y_0); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm = _fxxterm_T ? $signed(_fxyterm_T_3) : $signed(y_0); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_2 = 32'h0 - 32'hc90fdb0; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_1_T = _fxxterm_T ? _fxthetaterm_T_2 : 32'hc90fdb0; // @[TestCORDIC.scala 216:44]
+  wire [32:0] _theta_1_T_1 = {{1{_theta_1_T[31]}},_theta_1_T}; // @[TestCORDIC.scala 216:30]
+  wire [31:0] _theta_1_T_3 = _theta_1_T_1[31:0]; // @[TestCORDIC.scala 216:30]
+  wire [31:0] _x_1_T_3 = $signed(x_0) - $signed(fxyterm); // @[TestCORDIC.scala 217:22]
+  wire [31:0] _y_1_T_3 = $signed(fxxterm) + $signed(y_0); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_4 = $signed(theta_1) > $signed(z0s_1); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_7 = 32'sh0 - $signed(x_1); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_1 = $signed(theta_1) > $signed(z0s_1) ? $signed(_fxxterm_T_7) : $signed(x_1); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_7 = 32'sh0 - $signed(y_1); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_1 = _fxxterm_T_4 ? $signed(_fxyterm_T_7) : $signed(y_1); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_5 = 32'h0 - 32'h76b19c0; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_2_T = _fxxterm_T_4 ? _fxthetaterm_T_5 : 32'h76b19c0; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_2_T_3 = $signed(theta_1) + $signed(_theta_2_T); // @[TestCORDIC.scala 216:30]
+  wire [30:0] _GEN_0 = fxyterm_1[31:1]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_2_T = {{1{_GEN_0[30]}},_GEN_0}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_2_T_3 = $signed(x_1) - $signed(_x_2_T); // @[TestCORDIC.scala 217:22]
+  wire [30:0] _GEN_1 = fxxterm_1[31:1]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_2_T = {{1{_GEN_1[30]}},_GEN_1}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_2_T_3 = $signed(_y_2_T) + $signed(y_1); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_8 = $signed(theta_2) > $signed(z0s_2); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_11 = 32'sh0 - $signed(x_2); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_2 = $signed(theta_2) > $signed(z0s_2) ? $signed(_fxxterm_T_11) : $signed(x_2); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_11 = 32'sh0 - $signed(y_2); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_2 = _fxxterm_T_8 ? $signed(_fxyterm_T_11) : $signed(y_2); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_8 = 32'h0 - 32'h3eb6ec0; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_3_T = _fxxterm_T_8 ? _fxthetaterm_T_8 : 32'h3eb6ec0; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_3_T_3 = $signed(theta_2) + $signed(_theta_3_T); // @[TestCORDIC.scala 216:30]
+  wire [29:0] _GEN_2 = fxyterm_2[31:2]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_3_T = {{2{_GEN_2[29]}},_GEN_2}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_3_T_3 = $signed(x_2) - $signed(_x_3_T); // @[TestCORDIC.scala 217:22]
+  wire [29:0] _GEN_3 = fxxterm_2[31:2]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_3_T = {{2{_GEN_3[29]}},_GEN_3}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_3_T_3 = $signed(_y_3_T) + $signed(y_2); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_12 = $signed(theta_3) > $signed(z0s_3); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_15 = 32'sh0 - $signed(x_3); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_3 = $signed(theta_3) > $signed(z0s_3) ? $signed(_fxxterm_T_15) : $signed(x_3); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_15 = 32'sh0 - $signed(y_3); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_3 = _fxxterm_T_12 ? $signed(_fxyterm_T_15) : $signed(y_3); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_11 = 32'h0 - 32'h1fd5baa; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_4_T = _fxxterm_T_12 ? _fxthetaterm_T_11 : 32'h1fd5baa; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_4_T_3 = $signed(theta_3) + $signed(_theta_4_T); // @[TestCORDIC.scala 216:30]
+  wire [28:0] _GEN_4 = fxyterm_3[31:3]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_4_T = {{3{_GEN_4[28]}},_GEN_4}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_4_T_3 = $signed(x_3) - $signed(_x_4_T); // @[TestCORDIC.scala 217:22]
+  wire [28:0] _GEN_5 = fxxterm_3[31:3]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_4_T = {{3{_GEN_5[28]}},_GEN_5}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_4_T_3 = $signed(_y_4_T) + $signed(y_3); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_16 = $signed(theta_4) > $signed(z0s_4); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_19 = 32'sh0 - $signed(x_4); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_4 = $signed(theta_4) > $signed(z0s_4) ? $signed(_fxxterm_T_19) : $signed(x_4); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_19 = 32'sh0 - $signed(y_4); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_4 = _fxxterm_T_16 ? $signed(_fxyterm_T_19) : $signed(y_4); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_14 = 32'h0 - 32'hffaade; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_5_T = _fxxterm_T_16 ? _fxthetaterm_T_14 : 32'hffaade; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_5_T_3 = $signed(theta_4) + $signed(_theta_5_T); // @[TestCORDIC.scala 216:30]
+  wire [27:0] _GEN_6 = fxyterm_4[31:4]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_5_T = {{4{_GEN_6[27]}},_GEN_6}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_5_T_3 = $signed(x_4) - $signed(_x_5_T); // @[TestCORDIC.scala 217:22]
+  wire [27:0] _GEN_7 = fxxterm_4[31:4]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_5_T = {{4{_GEN_7[27]}},_GEN_7}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_5_T_3 = $signed(_y_5_T) + $signed(y_4); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_20 = $signed(theta_5) > $signed(z0s_5); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_23 = 32'sh0 - $signed(x_5); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_5 = $signed(theta_5) > $signed(z0s_5) ? $signed(_fxxterm_T_23) : $signed(x_5); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_23 = 32'sh0 - $signed(y_5); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_5 = _fxxterm_T_20 ? $signed(_fxyterm_T_23) : $signed(y_5); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_17 = 32'h0 - 32'h7ff557; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_6_T = _fxxterm_T_20 ? _fxthetaterm_T_17 : 32'h7ff557; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_6_T_3 = $signed(theta_5) + $signed(_theta_6_T); // @[TestCORDIC.scala 216:30]
+  wire [26:0] _GEN_8 = fxyterm_5[31:5]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_6_T = {{5{_GEN_8[26]}},_GEN_8}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_6_T_3 = $signed(x_5) - $signed(_x_6_T); // @[TestCORDIC.scala 217:22]
+  wire [26:0] _GEN_9 = fxxterm_5[31:5]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_6_T = {{5{_GEN_9[26]}},_GEN_9}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_6_T_3 = $signed(_y_6_T) + $signed(y_5); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_24 = $signed(theta_6) > $signed(z0s_6); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_27 = 32'sh0 - $signed(x_6); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_6 = $signed(theta_6) > $signed(z0s_6) ? $signed(_fxxterm_T_27) : $signed(x_6); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_27 = 32'sh0 - $signed(y_6); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_6 = _fxxterm_T_24 ? $signed(_fxyterm_T_27) : $signed(y_6); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_20 = 32'h0 - 32'h3ffeaa; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_7_T = _fxxterm_T_24 ? _fxthetaterm_T_20 : 32'h3ffeaa; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_7_T_3 = $signed(theta_6) + $signed(_theta_7_T); // @[TestCORDIC.scala 216:30]
+  wire [25:0] _GEN_10 = fxyterm_6[31:6]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_7_T = {{6{_GEN_10[25]}},_GEN_10}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_7_T_3 = $signed(x_6) - $signed(_x_7_T); // @[TestCORDIC.scala 217:22]
+  wire [25:0] _GEN_11 = fxxterm_6[31:6]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_7_T = {{6{_GEN_11[25]}},_GEN_11}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_7_T_3 = $signed(_y_7_T) + $signed(y_6); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_28 = $signed(theta_7) > $signed(z0s_7); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_31 = 32'sh0 - $signed(x_7); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_7 = $signed(theta_7) > $signed(z0s_7) ? $signed(_fxxterm_T_31) : $signed(x_7); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_31 = 32'sh0 - $signed(y_7); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_7 = _fxxterm_T_28 ? $signed(_fxyterm_T_31) : $signed(y_7); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_23 = 32'h0 - 32'h1fffd5; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_8_T = _fxxterm_T_28 ? _fxthetaterm_T_23 : 32'h1fffd5; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_8_T_3 = $signed(theta_7) + $signed(_theta_8_T); // @[TestCORDIC.scala 216:30]
+  wire [24:0] _GEN_12 = fxyterm_7[31:7]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_8_T = {{7{_GEN_12[24]}},_GEN_12}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_8_T_3 = $signed(x_7) - $signed(_x_8_T); // @[TestCORDIC.scala 217:22]
+  wire [24:0] _GEN_13 = fxxterm_7[31:7]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_8_T = {{7{_GEN_13[24]}},_GEN_13}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_8_T_3 = $signed(_y_8_T) + $signed(y_7); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_32 = $signed(theta_8) > $signed(z0s_8); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_35 = 32'sh0 - $signed(x_8); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_8 = $signed(theta_8) > $signed(z0s_8) ? $signed(_fxxterm_T_35) : $signed(x_8); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_35 = 32'sh0 - $signed(y_8); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_8 = _fxxterm_T_32 ? $signed(_fxyterm_T_35) : $signed(y_8); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_26 = 32'h0 - 32'hffffa; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_9_T = _fxxterm_T_32 ? _fxthetaterm_T_26 : 32'hffffa; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_9_T_3 = $signed(theta_8) + $signed(_theta_9_T); // @[TestCORDIC.scala 216:30]
+  wire [23:0] _GEN_14 = fxyterm_8[31:8]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_9_T = {{8{_GEN_14[23]}},_GEN_14}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_9_T_3 = $signed(x_8) - $signed(_x_9_T); // @[TestCORDIC.scala 217:22]
+  wire [23:0] _GEN_15 = fxxterm_8[31:8]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_9_T = {{8{_GEN_15[23]}},_GEN_15}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_9_T_3 = $signed(_y_9_T) + $signed(y_8); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_36 = $signed(theta_9) > $signed(z0s_9); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_39 = 32'sh0 - $signed(x_9); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_9 = $signed(theta_9) > $signed(z0s_9) ? $signed(_fxxterm_T_39) : $signed(x_9); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_39 = 32'sh0 - $signed(y_9); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_9 = _fxxterm_T_36 ? $signed(_fxyterm_T_39) : $signed(y_9); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_29 = 32'h0 - 32'h7ffff; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_10_T = _fxxterm_T_36 ? _fxthetaterm_T_29 : 32'h7ffff; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_10_T_3 = $signed(theta_9) + $signed(_theta_10_T); // @[TestCORDIC.scala 216:30]
+  wire [22:0] _GEN_16 = fxyterm_9[31:9]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_10_T = {{9{_GEN_16[22]}},_GEN_16}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_10_T_3 = $signed(x_9) - $signed(_x_10_T); // @[TestCORDIC.scala 217:22]
+  wire [22:0] _GEN_17 = fxxterm_9[31:9]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_10_T = {{9{_GEN_17[22]}},_GEN_17}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_10_T_3 = $signed(_y_10_T) + $signed(y_9); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_40 = $signed(theta_10) > $signed(z0s_10); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_43 = 32'sh0 - $signed(x_10); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_10 = $signed(theta_10) > $signed(z0s_10) ? $signed(_fxxterm_T_43) : $signed(x_10); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_43 = 32'sh0 - $signed(y_10); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_10 = _fxxterm_T_40 ? $signed(_fxyterm_T_43) : $signed(y_10); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_32 = 32'h0 - 32'h3ffff; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_11_T = _fxxterm_T_40 ? _fxthetaterm_T_32 : 32'h3ffff; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_11_T_3 = $signed(theta_10) + $signed(_theta_11_T); // @[TestCORDIC.scala 216:30]
+  wire [21:0] _GEN_18 = fxyterm_10[31:10]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_11_T = {{10{_GEN_18[21]}},_GEN_18}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_11_T_3 = $signed(x_10) - $signed(_x_11_T); // @[TestCORDIC.scala 217:22]
+  wire [21:0] _GEN_19 = fxxterm_10[31:10]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_11_T = {{10{_GEN_19[21]}},_GEN_19}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_11_T_3 = $signed(_y_11_T) + $signed(y_10); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_44 = $signed(theta_11) > $signed(z0s_11); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_47 = 32'sh0 - $signed(x_11); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_11 = $signed(theta_11) > $signed(z0s_11) ? $signed(_fxxterm_T_47) : $signed(x_11); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_47 = 32'sh0 - $signed(y_11); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_11 = _fxxterm_T_44 ? $signed(_fxyterm_T_47) : $signed(y_11); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_35 = 32'h0 - 32'h1ffff; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_12_T = _fxxterm_T_44 ? _fxthetaterm_T_35 : 32'h1ffff; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_12_T_3 = $signed(theta_11) + $signed(_theta_12_T); // @[TestCORDIC.scala 216:30]
+  wire [20:0] _GEN_20 = fxyterm_11[31:11]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_12_T = {{11{_GEN_20[20]}},_GEN_20}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_12_T_3 = $signed(x_11) - $signed(_x_12_T); // @[TestCORDIC.scala 217:22]
+  wire [20:0] _GEN_21 = fxxterm_11[31:11]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_12_T = {{11{_GEN_21[20]}},_GEN_21}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_12_T_3 = $signed(_y_12_T) + $signed(y_11); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_48 = $signed(theta_12) > $signed(z0s_12); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_51 = 32'sh0 - $signed(x_12); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_12 = $signed(theta_12) > $signed(z0s_12) ? $signed(_fxxterm_T_51) : $signed(x_12); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_51 = 32'sh0 - $signed(y_12); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_12 = _fxxterm_T_48 ? $signed(_fxyterm_T_51) : $signed(y_12); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_38 = 32'h0 - 32'h10000; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_13_T = _fxxterm_T_48 ? _fxthetaterm_T_38 : 32'h10000; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_13_T_3 = $signed(theta_12) + $signed(_theta_13_T); // @[TestCORDIC.scala 216:30]
+  wire [19:0] _GEN_22 = fxyterm_12[31:12]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_13_T = {{12{_GEN_22[19]}},_GEN_22}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_13_T_3 = $signed(x_12) - $signed(_x_13_T); // @[TestCORDIC.scala 217:22]
+  wire [19:0] _GEN_23 = fxxterm_12[31:12]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_13_T = {{12{_GEN_23[19]}},_GEN_23}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_13_T_3 = $signed(_y_13_T) + $signed(y_12); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_52 = $signed(theta_13) > $signed(z0s_13); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_55 = 32'sh0 - $signed(x_13); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_13 = $signed(theta_13) > $signed(z0s_13) ? $signed(_fxxterm_T_55) : $signed(x_13); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_55 = 32'sh0 - $signed(y_13); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_13 = _fxxterm_T_52 ? $signed(_fxyterm_T_55) : $signed(y_13); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_41 = 32'h0 - 32'h8000; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_14_T = _fxxterm_T_52 ? _fxthetaterm_T_41 : 32'h8000; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_14_T_3 = $signed(theta_13) + $signed(_theta_14_T); // @[TestCORDIC.scala 216:30]
+  wire [18:0] _GEN_24 = fxyterm_13[31:13]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_14_T = {{13{_GEN_24[18]}},_GEN_24}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_14_T_3 = $signed(x_13) - $signed(_x_14_T); // @[TestCORDIC.scala 217:22]
+  wire [18:0] _GEN_25 = fxxterm_13[31:13]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_14_T = {{13{_GEN_25[18]}},_GEN_25}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_14_T_3 = $signed(_y_14_T) + $signed(y_13); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_56 = $signed(theta_14) > $signed(z0s_14); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_59 = 32'sh0 - $signed(x_14); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_14 = $signed(theta_14) > $signed(z0s_14) ? $signed(_fxxterm_T_59) : $signed(x_14); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_59 = 32'sh0 - $signed(y_14); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_14 = _fxxterm_T_56 ? $signed(_fxyterm_T_59) : $signed(y_14); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_44 = 32'h0 - 32'h4000; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_15_T = _fxxterm_T_56 ? _fxthetaterm_T_44 : 32'h4000; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_15_T_3 = $signed(theta_14) + $signed(_theta_15_T); // @[TestCORDIC.scala 216:30]
+  wire [17:0] _GEN_26 = fxyterm_14[31:14]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_15_T = {{14{_GEN_26[17]}},_GEN_26}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_15_T_3 = $signed(x_14) - $signed(_x_15_T); // @[TestCORDIC.scala 217:22]
+  wire [17:0] _GEN_27 = fxxterm_14[31:14]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_15_T = {{14{_GEN_27[17]}},_GEN_27}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_15_T_3 = $signed(_y_15_T) + $signed(y_14); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_60 = $signed(theta_15) > $signed(z0s_15); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_63 = 32'sh0 - $signed(x_15); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_15 = $signed(theta_15) > $signed(z0s_15) ? $signed(_fxxterm_T_63) : $signed(x_15); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_63 = 32'sh0 - $signed(y_15); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_15 = _fxxterm_T_60 ? $signed(_fxyterm_T_63) : $signed(y_15); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_47 = 32'h0 - 32'h2000; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_16_T = _fxxterm_T_60 ? _fxthetaterm_T_47 : 32'h2000; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_16_T_3 = $signed(theta_15) + $signed(_theta_16_T); // @[TestCORDIC.scala 216:30]
+  wire [16:0] _GEN_28 = fxyterm_15[31:15]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_16_T = {{15{_GEN_28[16]}},_GEN_28}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_16_T_3 = $signed(x_15) - $signed(_x_16_T); // @[TestCORDIC.scala 217:22]
+  wire [16:0] _GEN_29 = fxxterm_15[31:15]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_16_T = {{15{_GEN_29[16]}},_GEN_29}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_16_T_3 = $signed(_y_16_T) + $signed(y_15); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_64 = $signed(theta_16) > $signed(z0s_16); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_67 = 32'sh0 - $signed(x_16); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_16 = $signed(theta_16) > $signed(z0s_16) ? $signed(_fxxterm_T_67) : $signed(x_16); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_67 = 32'sh0 - $signed(y_16); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_16 = _fxxterm_T_64 ? $signed(_fxyterm_T_67) : $signed(y_16); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_50 = 32'h0 - 32'h1000; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_17_T = _fxxterm_T_64 ? _fxthetaterm_T_50 : 32'h1000; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_17_T_3 = $signed(theta_16) + $signed(_theta_17_T); // @[TestCORDIC.scala 216:30]
+  wire [15:0] _GEN_30 = fxyterm_16[31:16]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_17_T = {{16{_GEN_30[15]}},_GEN_30}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_17_T_3 = $signed(x_16) - $signed(_x_17_T); // @[TestCORDIC.scala 217:22]
+  wire [15:0] _GEN_31 = fxxterm_16[31:16]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_17_T = {{16{_GEN_31[15]}},_GEN_31}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_17_T_3 = $signed(_y_17_T) + $signed(y_16); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_68 = $signed(theta_17) > $signed(z0s_17); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_71 = 32'sh0 - $signed(x_17); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_17 = $signed(theta_17) > $signed(z0s_17) ? $signed(_fxxterm_T_71) : $signed(x_17); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_71 = 32'sh0 - $signed(y_17); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_17 = _fxxterm_T_68 ? $signed(_fxyterm_T_71) : $signed(y_17); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_53 = 32'h0 - 32'h800; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_18_T = _fxxterm_T_68 ? _fxthetaterm_T_53 : 32'h800; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_18_T_3 = $signed(theta_17) + $signed(_theta_18_T); // @[TestCORDIC.scala 216:30]
+  wire [14:0] _GEN_32 = fxyterm_17[31:17]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_18_T = {{17{_GEN_32[14]}},_GEN_32}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_18_T_3 = $signed(x_17) - $signed(_x_18_T); // @[TestCORDIC.scala 217:22]
+  wire [14:0] _GEN_33 = fxxterm_17[31:17]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_18_T = {{17{_GEN_33[14]}},_GEN_33}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_18_T_3 = $signed(_y_18_T) + $signed(y_17); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_72 = $signed(theta_18) > $signed(z0s_18); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_75 = 32'sh0 - $signed(x_18); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_18 = $signed(theta_18) > $signed(z0s_18) ? $signed(_fxxterm_T_75) : $signed(x_18); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_75 = 32'sh0 - $signed(y_18); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_18 = _fxxterm_T_72 ? $signed(_fxyterm_T_75) : $signed(y_18); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_56 = 32'h0 - 32'h400; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_19_T = _fxxterm_T_72 ? _fxthetaterm_T_56 : 32'h400; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_19_T_3 = $signed(theta_18) + $signed(_theta_19_T); // @[TestCORDIC.scala 216:30]
+  wire [13:0] _GEN_34 = fxyterm_18[31:18]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_19_T = {{18{_GEN_34[13]}},_GEN_34}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_19_T_3 = $signed(x_18) - $signed(_x_19_T); // @[TestCORDIC.scala 217:22]
+  wire [13:0] _GEN_35 = fxxterm_18[31:18]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_19_T = {{18{_GEN_35[13]}},_GEN_35}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_19_T_3 = $signed(_y_19_T) + $signed(y_18); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_76 = $signed(theta_19) > $signed(z0s_19); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_79 = 32'sh0 - $signed(x_19); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_19 = $signed(theta_19) > $signed(z0s_19) ? $signed(_fxxterm_T_79) : $signed(x_19); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_79 = 32'sh0 - $signed(y_19); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_19 = _fxxterm_T_76 ? $signed(_fxyterm_T_79) : $signed(y_19); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_59 = 32'h0 - 32'h200; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_20_T = _fxxterm_T_76 ? _fxthetaterm_T_59 : 32'h200; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_20_T_3 = $signed(theta_19) + $signed(_theta_20_T); // @[TestCORDIC.scala 216:30]
+  wire [12:0] _GEN_36 = fxyterm_19[31:19]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_20_T = {{19{_GEN_36[12]}},_GEN_36}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_20_T_3 = $signed(x_19) - $signed(_x_20_T); // @[TestCORDIC.scala 217:22]
+  wire [12:0] _GEN_37 = fxxterm_19[31:19]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_20_T = {{19{_GEN_37[12]}},_GEN_37}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_20_T_3 = $signed(_y_20_T) + $signed(y_19); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_80 = $signed(theta_20) > $signed(z0s_20); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_83 = 32'sh0 - $signed(x_20); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_20 = $signed(theta_20) > $signed(z0s_20) ? $signed(_fxxterm_T_83) : $signed(x_20); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_83 = 32'sh0 - $signed(y_20); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_20 = _fxxterm_T_80 ? $signed(_fxyterm_T_83) : $signed(y_20); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_62 = 32'h0 - 32'h100; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_21_T = _fxxterm_T_80 ? _fxthetaterm_T_62 : 32'h100; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_21_T_3 = $signed(theta_20) + $signed(_theta_21_T); // @[TestCORDIC.scala 216:30]
+  wire [11:0] _GEN_38 = fxyterm_20[31:20]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_21_T = {{20{_GEN_38[11]}},_GEN_38}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_21_T_3 = $signed(x_20) - $signed(_x_21_T); // @[TestCORDIC.scala 217:22]
+  wire [11:0] _GEN_39 = fxxterm_20[31:20]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_21_T = {{20{_GEN_39[11]}},_GEN_39}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_21_T_3 = $signed(_y_21_T) + $signed(y_20); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_84 = $signed(theta_21) > $signed(z0s_21); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_87 = 32'sh0 - $signed(x_21); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_21 = $signed(theta_21) > $signed(z0s_21) ? $signed(_fxxterm_T_87) : $signed(x_21); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_87 = 32'sh0 - $signed(y_21); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_21 = _fxxterm_T_84 ? $signed(_fxyterm_T_87) : $signed(y_21); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_65 = 32'h0 - 32'h80; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_22_T = _fxxterm_T_84 ? _fxthetaterm_T_65 : 32'h80; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_22_T_3 = $signed(theta_21) + $signed(_theta_22_T); // @[TestCORDIC.scala 216:30]
+  wire [10:0] _GEN_40 = fxyterm_21[31:21]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_22_T = {{21{_GEN_40[10]}},_GEN_40}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_22_T_3 = $signed(x_21) - $signed(_x_22_T); // @[TestCORDIC.scala 217:22]
+  wire [10:0] _GEN_41 = fxxterm_21[31:21]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_22_T = {{21{_GEN_41[10]}},_GEN_41}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_22_T_3 = $signed(_y_22_T) + $signed(y_21); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_88 = $signed(theta_22) > $signed(z0s_22); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_91 = 32'sh0 - $signed(x_22); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_22 = $signed(theta_22) > $signed(z0s_22) ? $signed(_fxxterm_T_91) : $signed(x_22); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_91 = 32'sh0 - $signed(y_22); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_22 = _fxxterm_T_88 ? $signed(_fxyterm_T_91) : $signed(y_22); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_68 = 32'h0 - 32'h40; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_23_T = _fxxterm_T_88 ? _fxthetaterm_T_68 : 32'h40; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_23_T_3 = $signed(theta_22) + $signed(_theta_23_T); // @[TestCORDIC.scala 216:30]
+  wire [9:0] _GEN_42 = fxyterm_22[31:22]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_23_T = {{22{_GEN_42[9]}},_GEN_42}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_23_T_3 = $signed(x_22) - $signed(_x_23_T); // @[TestCORDIC.scala 217:22]
+  wire [9:0] _GEN_43 = fxxterm_22[31:22]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_23_T = {{22{_GEN_43[9]}},_GEN_43}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_23_T_3 = $signed(_y_23_T) + $signed(y_22); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_92 = $signed(theta_23) > $signed(z0s_23); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_95 = 32'sh0 - $signed(x_23); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_23 = $signed(theta_23) > $signed(z0s_23) ? $signed(_fxxterm_T_95) : $signed(x_23); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_95 = 32'sh0 - $signed(y_23); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_23 = _fxxterm_T_92 ? $signed(_fxyterm_T_95) : $signed(y_23); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_71 = 32'h0 - 32'h20; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_24_T = _fxxterm_T_92 ? _fxthetaterm_T_71 : 32'h20; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_24_T_3 = $signed(theta_23) + $signed(_theta_24_T); // @[TestCORDIC.scala 216:30]
+  wire [8:0] _GEN_44 = fxyterm_23[31:23]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_24_T = {{23{_GEN_44[8]}},_GEN_44}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_24_T_3 = $signed(x_23) - $signed(_x_24_T); // @[TestCORDIC.scala 217:22]
+  wire [8:0] _GEN_45 = fxxterm_23[31:23]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_24_T = {{23{_GEN_45[8]}},_GEN_45}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_24_T_3 = $signed(_y_24_T) + $signed(y_23); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_96 = $signed(theta_24) > $signed(z0s_24); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_99 = 32'sh0 - $signed(x_24); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_24 = $signed(theta_24) > $signed(z0s_24) ? $signed(_fxxterm_T_99) : $signed(x_24); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_99 = 32'sh0 - $signed(y_24); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_24 = _fxxterm_T_96 ? $signed(_fxyterm_T_99) : $signed(y_24); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_74 = 32'h0 - 32'h10; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_25_T = _fxxterm_T_96 ? _fxthetaterm_T_74 : 32'h10; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_25_T_3 = $signed(theta_24) + $signed(_theta_25_T); // @[TestCORDIC.scala 216:30]
+  wire [7:0] _GEN_46 = fxyterm_24[31:24]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_25_T = {{24{_GEN_46[7]}},_GEN_46}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_25_T_3 = $signed(x_24) - $signed(_x_25_T); // @[TestCORDIC.scala 217:22]
+  wire [7:0] _GEN_47 = fxxterm_24[31:24]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_25_T = {{24{_GEN_47[7]}},_GEN_47}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_25_T_3 = $signed(_y_25_T) + $signed(y_24); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_100 = $signed(theta_25) > $signed(z0s_25); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_103 = 32'sh0 - $signed(x_25); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_25 = $signed(theta_25) > $signed(z0s_25) ? $signed(_fxxterm_T_103) : $signed(x_25); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_103 = 32'sh0 - $signed(y_25); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_25 = _fxxterm_T_100 ? $signed(_fxyterm_T_103) : $signed(y_25); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_77 = 32'h0 - 32'h8; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_26_T = _fxxterm_T_100 ? _fxthetaterm_T_77 : 32'h8; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_26_T_3 = $signed(theta_25) + $signed(_theta_26_T); // @[TestCORDIC.scala 216:30]
+  wire [6:0] _GEN_48 = fxyterm_25[31:25]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_26_T = {{25{_GEN_48[6]}},_GEN_48}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_26_T_3 = $signed(x_25) - $signed(_x_26_T); // @[TestCORDIC.scala 217:22]
+  wire [6:0] _GEN_49 = fxxterm_25[31:25]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_26_T = {{25{_GEN_49[6]}},_GEN_49}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_26_T_3 = $signed(_y_26_T) + $signed(y_25); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_104 = $signed(theta_26) > $signed(z0s_26); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_107 = 32'sh0 - $signed(x_26); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_26 = $signed(theta_26) > $signed(z0s_26) ? $signed(_fxxterm_T_107) : $signed(x_26); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_107 = 32'sh0 - $signed(y_26); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_26 = _fxxterm_T_104 ? $signed(_fxyterm_T_107) : $signed(y_26); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_80 = 32'h0 - 32'h4; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_27_T = _fxxterm_T_104 ? _fxthetaterm_T_80 : 32'h4; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_27_T_3 = $signed(theta_26) + $signed(_theta_27_T); // @[TestCORDIC.scala 216:30]
+  wire [5:0] _GEN_50 = fxyterm_26[31:26]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_27_T = {{26{_GEN_50[5]}},_GEN_50}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_27_T_3 = $signed(x_26) - $signed(_x_27_T); // @[TestCORDIC.scala 217:22]
+  wire [5:0] _GEN_51 = fxxterm_26[31:26]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_27_T = {{26{_GEN_51[5]}},_GEN_51}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_27_T_3 = $signed(_y_27_T) + $signed(y_26); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_108 = $signed(theta_27) > $signed(z0s_27); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_111 = 32'sh0 - $signed(x_27); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_27 = $signed(theta_27) > $signed(z0s_27) ? $signed(_fxxterm_T_111) : $signed(x_27); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_111 = 32'sh0 - $signed(y_27); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_27 = _fxxterm_T_108 ? $signed(_fxyterm_T_111) : $signed(y_27); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_83 = 32'h0 - 32'h2; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_28_T = _fxxterm_T_108 ? _fxthetaterm_T_83 : 32'h2; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_28_T_3 = $signed(theta_27) + $signed(_theta_28_T); // @[TestCORDIC.scala 216:30]
+  wire [4:0] _GEN_52 = fxyterm_27[31:27]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_28_T = {{27{_GEN_52[4]}},_GEN_52}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_28_T_3 = $signed(x_27) - $signed(_x_28_T); // @[TestCORDIC.scala 217:22]
+  wire [4:0] _GEN_53 = fxxterm_27[31:27]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_28_T = {{27{_GEN_53[4]}},_GEN_53}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_28_T_3 = $signed(_y_28_T) + $signed(y_27); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_112 = $signed(theta_28) > $signed(z0s_28); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_115 = 32'sh0 - $signed(x_28); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_28 = $signed(theta_28) > $signed(z0s_28) ? $signed(_fxxterm_T_115) : $signed(x_28); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_115 = 32'sh0 - $signed(y_28); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_28 = _fxxterm_T_112 ? $signed(_fxyterm_T_115) : $signed(y_28); // @[TestCORDIC.scala 213:22]
+  wire [31:0] _fxthetaterm_T_86 = 32'h0 - 32'h1; // @[TestCORDIC.scala 214:46]
+  wire [31:0] _theta_29_T = _fxxterm_T_112 ? _fxthetaterm_T_86 : 32'h1; // @[TestCORDIC.scala 216:44]
+  wire [31:0] _theta_29_T_3 = $signed(theta_28) + $signed(_theta_29_T); // @[TestCORDIC.scala 216:30]
+  wire [3:0] _GEN_54 = fxyterm_28[31:28]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_29_T = {{28{_GEN_54[3]}},_GEN_54}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_29_T_3 = $signed(x_28) - $signed(_x_29_T); // @[TestCORDIC.scala 217:22]
+  wire [3:0] _GEN_55 = fxxterm_28[31:28]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_29_T = {{28{_GEN_55[3]}},_GEN_55}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_29_T_3 = $signed(_y_29_T) + $signed(y_28); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_116 = $signed(theta_29) > $signed(z0s_29); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_119 = 32'sh0 - $signed(x_29); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_29 = $signed(theta_29) > $signed(z0s_29) ? $signed(_fxxterm_T_119) : $signed(x_29); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_119 = 32'sh0 - $signed(y_29); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_29 = _fxxterm_T_116 ? $signed(_fxyterm_T_119) : $signed(y_29); // @[TestCORDIC.scala 213:22]
+  wire [32:0] _theta_30_T_1 = {{1{theta_29[31]}},theta_29}; // @[TestCORDIC.scala 216:30]
+  wire [31:0] _theta_30_T_3 = _theta_30_T_1[31:0]; // @[TestCORDIC.scala 216:30]
+  wire [2:0] _GEN_56 = fxyterm_29[31:29]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_30_T = {{29{_GEN_56[2]}},_GEN_56}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_30_T_3 = $signed(x_29) - $signed(_x_30_T); // @[TestCORDIC.scala 217:22]
+  wire [2:0] _GEN_57 = fxxterm_29[31:29]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_30_T = {{29{_GEN_57[2]}},_GEN_57}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_30_T_3 = $signed(_y_30_T) + $signed(y_29); // @[TestCORDIC.scala 218:46]
+  wire  _fxxterm_T_120 = $signed(theta_30) > $signed(z0s_30); // @[TestCORDIC.scala 212:32]
+  wire [31:0] _fxxterm_T_123 = 32'sh0 - $signed(x_30); // @[TestCORDIC.scala 212:42]
+  wire [31:0] fxxterm_30 = $signed(theta_30) > $signed(z0s_30) ? $signed(_fxxterm_T_123) : $signed(x_30); // @[TestCORDIC.scala 212:22]
+  wire [31:0] _fxyterm_T_123 = 32'sh0 - $signed(y_30); // @[TestCORDIC.scala 213:42]
+  wire [31:0] fxyterm_30 = _fxxterm_T_120 ? $signed(_fxyterm_T_123) : $signed(y_30); // @[TestCORDIC.scala 213:22]
+  wire [1:0] _GEN_58 = fxyterm_30[31:30]; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_31_T = {{30{_GEN_58[1]}},_GEN_58}; // @[TestCORDIC.scala 217:33]
+  wire [31:0] _x_31_T_3 = $signed(x_30) - $signed(_x_31_T); // @[TestCORDIC.scala 217:22]
+  wire [1:0] _GEN_59 = fxxterm_30[31:30]; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_31_T = {{30{_GEN_59[1]}},_GEN_59}; // @[TestCORDIC.scala 218:26]
+  wire [31:0] _y_31_T_3 = $signed(_y_31_T) + $signed(y_30); // @[TestCORDIC.scala 218:46]
+  FloatToFixed32 tofixedx0 ( // @[TestCORDIC.scala 187:25]
+    .io_in(tofixedx0_io_in),
+    .io_out(tofixedx0_io_out)
   );
-  CORDIC_ROM rom ( // @[TestCORDIC.scala 166:27]
-    .io_atanout(rom_io_atanout),
-    .io_atanselect(rom_io_atanselect)
+  FloatToFixed32 tofixedy0 ( // @[TestCORDIC.scala 188:25]
+    .io_in(tofixedy0_io_in),
+    .io_out(tofixedy0_io_out)
   );
-  AdderSubber xadder ( // @[TestCORDIC.scala 174:30]
-    .clock(xadder_clock),
-    .reset(xadder_reset),
-    .io_in_a(xadder_io_in_a),
-    .io_in_b(xadder_io_in_b),
-    .io_in_sel(xadder_io_in_sel),
-    .io_out_s(xadder_io_out_s)
+  FloatToFixed32 tofixedz0 ( // @[TestCORDIC.scala 189:25]
+    .io_in(tofixedz0_io_in),
+    .io_out(tofixedz0_io_out)
   );
-  AdderSubber yadder ( // @[TestCORDIC.scala 175:30]
-    .clock(yadder_clock),
-    .reset(yadder_reset),
-    .io_in_a(yadder_io_in_a),
-    .io_in_b(yadder_io_in_b),
-    .io_in_sel(yadder_io_in_sel),
-    .io_out_s(yadder_io_out_s)
+  FixedToFloat32 tofloatxout ( // @[TestCORDIC.scala 222:27]
+    .io_in(tofloatxout_io_in),
+    .io_out(tofloatxout_io_out)
   );
-  FP_comparator floatcmp ( // @[TestCORDIC.scala 195:32]
-    .io_in_a(floatcmp_io_in_a),
-    .io_in_b(floatcmp_io_in_b),
-    .io_out_s(floatcmp_io_out_s)
+  FixedToFloat32 tofloatyout ( // @[TestCORDIC.scala 223:27]
+    .io_in(tofloatyout_io_in),
+    .io_out(tofloatyout_io_out)
   );
-  FloatHalver yhalver ( // @[TestCORDIC.scala 199:31]
-    .io_in(yhalver_io_in),
-    .io_amt(yhalver_io_amt),
-    .io_out(yhalver_io_out)
+  FixedToFloat32 tofloatzout ( // @[TestCORDIC.scala 224:27]
+    .io_in(tofloatzout_io_in),
+    .io_out(tofloatzout_io_out)
   );
-  FloatHalver xhalver ( // @[TestCORDIC.scala 200:31]
-    .io_in(xhalver_io_in),
-    .io_amt(xhalver_io_amt),
-    .io_out(xhalver_io_out)
-  );
-  AdderSubber theta_addersubber ( // @[TestCORDIC.scala 217:41]
-    .clock(theta_addersubber_clock),
-    .reset(theta_addersubber_reset),
-    .io_in_a(theta_addersubber_io_in_a),
-    .io_in_b(theta_addersubber_io_in_b),
-    .io_in_sel(theta_addersubber_io_in_sel),
-    .io_out_s(theta_addersubber_io_out_s)
-  );
-  assign io_out_x = x_2; // @[TestCORDIC.scala 183:12]
-  assign io_out_y = y_2; // @[TestCORDIC.scala 184:12]
-  assign io_out_z = theta_2; // @[TestCORDIC.scala 185:12]
-  assign io_out_output_ready = controller_io_out_output_rdy; // @[TestCORDIC.scala 162:23]
-  assign io_out_pipe_ready = controller_io_out_pipe_rdy; // @[TestCORDIC.scala 163:21]
-  assign io_out_pipeline_count = controller_io_out_pipeline_count; // @[TestCORDIC.scala 164:25]
-  assign controller_clock = clock;
-  assign controller_reset = reset;
-  assign rom_io_atanselect = cnt_0[5:0]; // @[TestCORDIC.scala 219:21]
-  assign xadder_clock = clock;
-  assign xadder_reset = reset;
-  assign xadder_io_in_a = x_0; // @[TestCORDIC.scala 207:18]
-  assign xadder_io_in_b = {_xadder_io_in_b_T_4,yhalver_io_out[30:0]}; // @[TestCORDIC.scala 209:31]
-  assign xadder_io_in_sel = 1'h1; // @[TestCORDIC.scala 210:20]
-  assign yadder_clock = clock;
-  assign yadder_reset = reset;
-  assign yadder_io_in_a = {_yadder_io_in_a_T_4,xhalver_io_out[30:0]}; // @[TestCORDIC.scala 213:31]
-  assign yadder_io_in_b = y_0; // @[TestCORDIC.scala 214:18]
-  assign yadder_io_in_sel = 1'h0; // @[TestCORDIC.scala 215:20]
-  assign floatcmp_io_in_a = theta_0; // @[TestCORDIC.scala 196:20]
-  assign floatcmp_io_in_b = z_0; // @[TestCORDIC.scala 197:20]
-  assign yhalver_io_in = y_0; // @[TestCORDIC.scala 204:17]
-  assign yhalver_io_amt = cnt_0[4:0]; // @[TestCORDIC.scala 205:18]
-  assign xhalver_io_in = x_0; // @[TestCORDIC.scala 202:17]
-  assign xhalver_io_amt = cnt_0[4:0]; // @[TestCORDIC.scala 203:18]
-  assign theta_addersubber_clock = clock;
-  assign theta_addersubber_reset = reset;
-  assign theta_addersubber_io_in_a = theta_0; // @[TestCORDIC.scala 218:29]
-  assign theta_addersubber_io_in_b = rom_io_atanout; // @[TestCORDIC.scala 220:29]
-  assign theta_addersubber_io_in_sel = floatcmp_io_out_s == theta_0; // @[TestCORDIC.scala 221:52]
+  assign io_out_x = tofloatxout_io_out; // @[TestCORDIC.scala 230:12]
+  assign io_out_y = tofloatyout_io_out; // @[TestCORDIC.scala 231:12]
+  assign io_out_z = tofloatzout_io_out; // @[TestCORDIC.scala 232:12]
+  assign tofixedx0_io_in = io_in_x0; // @[TestCORDIC.scala 190:19]
+  assign tofixedy0_io_in = io_in_y0; // @[TestCORDIC.scala 191:19]
+  assign tofixedz0_io_in = io_in_z0; // @[TestCORDIC.scala 192:19]
+  assign tofloatxout_io_in = x_31; // @[TestCORDIC.scala 226:30]
+  assign tofloatyout_io_in = y_31; // @[TestCORDIC.scala 227:30]
+  assign tofloatzout_io_in = z0s_31; // @[TestCORDIC.scala 228:32]
   always @(posedge clock) begin
-    if (reset) begin // @[TestCORDIC.scala 155:26]
-      x_0 <= 32'h0; // @[TestCORDIC.scala 155:26]
-    end else if (controller_io_out_pipe_rdy) begin // @[TestCORDIC.scala 177:14]
-      x_0 <= x_2;
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_0 <= 32'sh0; // @[TestCORDIC.scala 194:18]
     end else begin
-      x_0 <= io_in_x0;
+      x_0 <= tofixedx0_io_out; // @[TestCORDIC.scala 206:8]
     end
-    if (reset) begin // @[TestCORDIC.scala 155:26]
-      x_2 <= 32'h0; // @[TestCORDIC.scala 155:26]
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_1 <= 32'sh0; // @[TestCORDIC.scala 194:18]
     end else begin
-      x_2 <= xadder_io_out_s; // @[TestCORDIC.scala 225:8]
+      x_1 <= _x_1_T_3; // @[TestCORDIC.scala 217:14]
     end
-    if (reset) begin // @[TestCORDIC.scala 156:26]
-      y_0 <= 32'h0; // @[TestCORDIC.scala 156:26]
-    end else if (_x_0_T) begin // @[TestCORDIC.scala 178:14]
-      y_0 <= y_2;
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_2 <= 32'sh0; // @[TestCORDIC.scala 194:18]
     end else begin
-      y_0 <= io_in_y0;
+      x_2 <= _x_2_T_3; // @[TestCORDIC.scala 217:14]
     end
-    if (reset) begin // @[TestCORDIC.scala 156:26]
-      y_2 <= 32'h0; // @[TestCORDIC.scala 156:26]
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_3 <= 32'sh0; // @[TestCORDIC.scala 194:18]
     end else begin
-      y_2 <= yadder_io_out_s; // @[TestCORDIC.scala 226:8]
+      x_3 <= _x_3_T_3; // @[TestCORDIC.scala 217:14]
     end
-    if (reset) begin // @[TestCORDIC.scala 157:26]
-      z_0 <= 32'h0; // @[TestCORDIC.scala 157:26]
-    end else if (_x_0_T) begin // @[TestCORDIC.scala 179:14]
-      z_0 <= z_2;
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_4 <= 32'sh0; // @[TestCORDIC.scala 194:18]
     end else begin
-      z_0 <= io_in_z0;
+      x_4 <= _x_4_T_3; // @[TestCORDIC.scala 217:14]
     end
-    if (reset) begin // @[TestCORDIC.scala 157:26]
-      z_1 <= 32'h0; // @[TestCORDIC.scala 157:26]
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_5 <= 32'sh0; // @[TestCORDIC.scala 194:18]
     end else begin
-      z_1 <= z_0; // @[TestCORDIC.scala 191:8]
+      x_5 <= _x_5_T_3; // @[TestCORDIC.scala 217:14]
     end
-    if (reset) begin // @[TestCORDIC.scala 157:26]
-      z_2 <= 32'h0; // @[TestCORDIC.scala 157:26]
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_6 <= 32'sh0; // @[TestCORDIC.scala 194:18]
     end else begin
-      z_2 <= z_1; // @[TestCORDIC.scala 227:8]
+      x_6 <= _x_6_T_3; // @[TestCORDIC.scala 217:14]
     end
-    if (reset) begin // @[TestCORDIC.scala 158:30]
-      theta_0 <= 32'h0; // @[TestCORDIC.scala 158:30]
-    end else if (_x_0_T) begin // @[TestCORDIC.scala 180:18]
-      theta_0 <= theta_2;
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_7 <= 32'sh0; // @[TestCORDIC.scala 194:18]
     end else begin
-      theta_0 <= 32'h0;
+      x_7 <= _x_7_T_3; // @[TestCORDIC.scala 217:14]
     end
-    if (reset) begin // @[TestCORDIC.scala 158:30]
-      theta_2 <= 32'h0; // @[TestCORDIC.scala 158:30]
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_8 <= 32'sh0; // @[TestCORDIC.scala 194:18]
     end else begin
-      theta_2 <= theta_addersubber_io_out_s; // @[TestCORDIC.scala 228:12]
+      x_8 <= _x_8_T_3; // @[TestCORDIC.scala 217:14]
     end
-    if (reset) begin // @[TestCORDIC.scala 159:28]
-      cnt_0 <= 32'h0; // @[TestCORDIC.scala 159:28]
-    end else if (_x_0_T) begin // @[TestCORDIC.scala 181:16]
-      cnt_0 <= _cnt_0_T_2;
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_9 <= 32'sh0; // @[TestCORDIC.scala 194:18]
     end else begin
-      cnt_0 <= 32'h0;
+      x_9 <= _x_9_T_3; // @[TestCORDIC.scala 217:14]
     end
-    if (reset) begin // @[TestCORDIC.scala 159:28]
-      cnt_1 <= 32'h0; // @[TestCORDIC.scala 159:28]
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_10 <= 32'sh0; // @[TestCORDIC.scala 194:18]
     end else begin
-      cnt_1 <= cnt_0; // @[TestCORDIC.scala 193:10]
+      x_10 <= _x_10_T_3; // @[TestCORDIC.scala 217:14]
     end
-    if (reset) begin // @[TestCORDIC.scala 159:28]
-      cnt_2 <= 32'h0; // @[TestCORDIC.scala 159:28]
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_11 <= 32'sh0; // @[TestCORDIC.scala 194:18]
     end else begin
-      cnt_2 <= cnt_1; // @[TestCORDIC.scala 229:10]
+      x_11 <= _x_11_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_12 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_12 <= _x_12_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_13 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_13 <= _x_13_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_14 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_14 <= _x_14_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_15 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_15 <= _x_15_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_16 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_16 <= _x_16_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_17 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_17 <= _x_17_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_18 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_18 <= _x_18_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_19 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_19 <= _x_19_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_20 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_20 <= _x_20_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_21 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_21 <= _x_21_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_22 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_22 <= _x_22_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_23 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_23 <= _x_23_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_24 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_24 <= _x_24_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_25 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_25 <= _x_25_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_26 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_26 <= _x_26_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_27 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_27 <= _x_27_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_28 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_28 <= _x_28_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_29 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_29 <= _x_29_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_30 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_30 <= _x_30_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 194:18]
+      x_31 <= 32'sh0; // @[TestCORDIC.scala 194:18]
+    end else begin
+      x_31 <= _x_31_T_3; // @[TestCORDIC.scala 217:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_0 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_0 <= tofixedy0_io_out; // @[TestCORDIC.scala 207:8]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_1 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_1 <= _y_1_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_2 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_2 <= _y_2_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_3 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_3 <= _y_3_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_4 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_4 <= _y_4_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_5 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_5 <= _y_5_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_6 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_6 <= _y_6_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_7 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_7 <= _y_7_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_8 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_8 <= _y_8_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_9 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_9 <= _y_9_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_10 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_10 <= _y_10_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_11 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_11 <= _y_11_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_12 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_12 <= _y_12_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_13 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_13 <= _y_13_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_14 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_14 <= _y_14_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_15 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_15 <= _y_15_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_16 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_16 <= _y_16_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_17 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_17 <= _y_17_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_18 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_18 <= _y_18_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_19 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_19 <= _y_19_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_20 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_20 <= _y_20_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_21 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_21 <= _y_21_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_22 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_22 <= _y_22_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_23 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_23 <= _y_23_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_24 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_24 <= _y_24_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_25 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_25 <= _y_25_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_26 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_26 <= _y_26_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_27 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_27 <= _y_27_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_28 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_28 <= _y_28_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_29 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_29 <= _y_29_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_30 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_30 <= _y_30_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 195:18]
+      y_31 <= 32'sh0; // @[TestCORDIC.scala 195:18]
+    end else begin
+      y_31 <= _y_31_T_3; // @[TestCORDIC.scala 218:14]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_1 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_1 <= _theta_1_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_2 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_2 <= _theta_2_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_3 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_3 <= _theta_3_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_4 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_4 <= _theta_4_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_5 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_5 <= _theta_5_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_6 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_6 <= _theta_6_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_7 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_7 <= _theta_7_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_8 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_8 <= _theta_8_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_9 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_9 <= _theta_9_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_10 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_10 <= _theta_10_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_11 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_11 <= _theta_11_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_12 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_12 <= _theta_12_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_13 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_13 <= _theta_13_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_14 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_14 <= _theta_14_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_15 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_15 <= _theta_15_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_16 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_16 <= _theta_16_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_17 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_17 <= _theta_17_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_18 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_18 <= _theta_18_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_19 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_19 <= _theta_19_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_20 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_20 <= _theta_20_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_21 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_21 <= _theta_21_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_22 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_22 <= _theta_22_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_23 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_23 <= _theta_23_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_24 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_24 <= _theta_24_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_25 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_25 <= _theta_25_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_26 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_26 <= _theta_26_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_27 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_27 <= _theta_27_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_28 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_28 <= _theta_28_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_29 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_29 <= _theta_29_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 196:22]
+      theta_30 <= 32'sh0; // @[TestCORDIC.scala 196:22]
+    end else begin
+      theta_30 <= _theta_30_T_3; // @[TestCORDIC.scala 216:18]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_0 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_0 <= tofixedz0_io_out; // @[TestCORDIC.scala 208:10]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_1 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_1 <= z0s_0; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_2 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_2 <= z0s_1; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_3 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_3 <= z0s_2; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_4 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_4 <= z0s_3; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_5 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_5 <= z0s_4; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_6 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_6 <= z0s_5; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_7 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_7 <= z0s_6; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_8 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_8 <= z0s_7; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_9 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_9 <= z0s_8; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_10 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_10 <= z0s_9; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_11 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_11 <= z0s_10; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_12 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_12 <= z0s_11; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_13 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_13 <= z0s_12; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_14 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_14 <= z0s_13; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_15 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_15 <= z0s_14; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_16 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_16 <= z0s_15; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_17 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_17 <= z0s_16; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_18 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_18 <= z0s_17; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_19 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_19 <= z0s_18; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_20 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_20 <= z0s_19; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_21 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_21 <= z0s_20; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_22 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_22 <= z0s_21; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_23 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_23 <= z0s_22; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_24 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_24 <= z0s_23; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_25 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_25 <= z0s_24; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_26 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_26 <= z0s_25; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_27 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_27 <= z0s_26; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_28 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_28 <= z0s_27; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_29 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_29 <= z0s_28; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_30 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_30 <= z0s_29; // @[TestCORDIC.scala 219:16]
+    end
+    if (reset) begin // @[TestCORDIC.scala 197:20]
+      z0s_31 <= 32'sh0; // @[TestCORDIC.scala 197:20]
+    end else begin
+      z0s_31 <= z0s_30; // @[TestCORDIC.scala 219:16]
     end
   end
 // Register and memory initialization
@@ -759,27 +1478,255 @@ initial begin
   _RAND_0 = {1{`RANDOM}};
   x_0 = _RAND_0[31:0];
   _RAND_1 = {1{`RANDOM}};
-  x_2 = _RAND_1[31:0];
+  x_1 = _RAND_1[31:0];
   _RAND_2 = {1{`RANDOM}};
-  y_0 = _RAND_2[31:0];
+  x_2 = _RAND_2[31:0];
   _RAND_3 = {1{`RANDOM}};
-  y_2 = _RAND_3[31:0];
+  x_3 = _RAND_3[31:0];
   _RAND_4 = {1{`RANDOM}};
-  z_0 = _RAND_4[31:0];
+  x_4 = _RAND_4[31:0];
   _RAND_5 = {1{`RANDOM}};
-  z_1 = _RAND_5[31:0];
+  x_5 = _RAND_5[31:0];
   _RAND_6 = {1{`RANDOM}};
-  z_2 = _RAND_6[31:0];
+  x_6 = _RAND_6[31:0];
   _RAND_7 = {1{`RANDOM}};
-  theta_0 = _RAND_7[31:0];
+  x_7 = _RAND_7[31:0];
   _RAND_8 = {1{`RANDOM}};
-  theta_2 = _RAND_8[31:0];
+  x_8 = _RAND_8[31:0];
   _RAND_9 = {1{`RANDOM}};
-  cnt_0 = _RAND_9[31:0];
+  x_9 = _RAND_9[31:0];
   _RAND_10 = {1{`RANDOM}};
-  cnt_1 = _RAND_10[31:0];
+  x_10 = _RAND_10[31:0];
   _RAND_11 = {1{`RANDOM}};
-  cnt_2 = _RAND_11[31:0];
+  x_11 = _RAND_11[31:0];
+  _RAND_12 = {1{`RANDOM}};
+  x_12 = _RAND_12[31:0];
+  _RAND_13 = {1{`RANDOM}};
+  x_13 = _RAND_13[31:0];
+  _RAND_14 = {1{`RANDOM}};
+  x_14 = _RAND_14[31:0];
+  _RAND_15 = {1{`RANDOM}};
+  x_15 = _RAND_15[31:0];
+  _RAND_16 = {1{`RANDOM}};
+  x_16 = _RAND_16[31:0];
+  _RAND_17 = {1{`RANDOM}};
+  x_17 = _RAND_17[31:0];
+  _RAND_18 = {1{`RANDOM}};
+  x_18 = _RAND_18[31:0];
+  _RAND_19 = {1{`RANDOM}};
+  x_19 = _RAND_19[31:0];
+  _RAND_20 = {1{`RANDOM}};
+  x_20 = _RAND_20[31:0];
+  _RAND_21 = {1{`RANDOM}};
+  x_21 = _RAND_21[31:0];
+  _RAND_22 = {1{`RANDOM}};
+  x_22 = _RAND_22[31:0];
+  _RAND_23 = {1{`RANDOM}};
+  x_23 = _RAND_23[31:0];
+  _RAND_24 = {1{`RANDOM}};
+  x_24 = _RAND_24[31:0];
+  _RAND_25 = {1{`RANDOM}};
+  x_25 = _RAND_25[31:0];
+  _RAND_26 = {1{`RANDOM}};
+  x_26 = _RAND_26[31:0];
+  _RAND_27 = {1{`RANDOM}};
+  x_27 = _RAND_27[31:0];
+  _RAND_28 = {1{`RANDOM}};
+  x_28 = _RAND_28[31:0];
+  _RAND_29 = {1{`RANDOM}};
+  x_29 = _RAND_29[31:0];
+  _RAND_30 = {1{`RANDOM}};
+  x_30 = _RAND_30[31:0];
+  _RAND_31 = {1{`RANDOM}};
+  x_31 = _RAND_31[31:0];
+  _RAND_32 = {1{`RANDOM}};
+  y_0 = _RAND_32[31:0];
+  _RAND_33 = {1{`RANDOM}};
+  y_1 = _RAND_33[31:0];
+  _RAND_34 = {1{`RANDOM}};
+  y_2 = _RAND_34[31:0];
+  _RAND_35 = {1{`RANDOM}};
+  y_3 = _RAND_35[31:0];
+  _RAND_36 = {1{`RANDOM}};
+  y_4 = _RAND_36[31:0];
+  _RAND_37 = {1{`RANDOM}};
+  y_5 = _RAND_37[31:0];
+  _RAND_38 = {1{`RANDOM}};
+  y_6 = _RAND_38[31:0];
+  _RAND_39 = {1{`RANDOM}};
+  y_7 = _RAND_39[31:0];
+  _RAND_40 = {1{`RANDOM}};
+  y_8 = _RAND_40[31:0];
+  _RAND_41 = {1{`RANDOM}};
+  y_9 = _RAND_41[31:0];
+  _RAND_42 = {1{`RANDOM}};
+  y_10 = _RAND_42[31:0];
+  _RAND_43 = {1{`RANDOM}};
+  y_11 = _RAND_43[31:0];
+  _RAND_44 = {1{`RANDOM}};
+  y_12 = _RAND_44[31:0];
+  _RAND_45 = {1{`RANDOM}};
+  y_13 = _RAND_45[31:0];
+  _RAND_46 = {1{`RANDOM}};
+  y_14 = _RAND_46[31:0];
+  _RAND_47 = {1{`RANDOM}};
+  y_15 = _RAND_47[31:0];
+  _RAND_48 = {1{`RANDOM}};
+  y_16 = _RAND_48[31:0];
+  _RAND_49 = {1{`RANDOM}};
+  y_17 = _RAND_49[31:0];
+  _RAND_50 = {1{`RANDOM}};
+  y_18 = _RAND_50[31:0];
+  _RAND_51 = {1{`RANDOM}};
+  y_19 = _RAND_51[31:0];
+  _RAND_52 = {1{`RANDOM}};
+  y_20 = _RAND_52[31:0];
+  _RAND_53 = {1{`RANDOM}};
+  y_21 = _RAND_53[31:0];
+  _RAND_54 = {1{`RANDOM}};
+  y_22 = _RAND_54[31:0];
+  _RAND_55 = {1{`RANDOM}};
+  y_23 = _RAND_55[31:0];
+  _RAND_56 = {1{`RANDOM}};
+  y_24 = _RAND_56[31:0];
+  _RAND_57 = {1{`RANDOM}};
+  y_25 = _RAND_57[31:0];
+  _RAND_58 = {1{`RANDOM}};
+  y_26 = _RAND_58[31:0];
+  _RAND_59 = {1{`RANDOM}};
+  y_27 = _RAND_59[31:0];
+  _RAND_60 = {1{`RANDOM}};
+  y_28 = _RAND_60[31:0];
+  _RAND_61 = {1{`RANDOM}};
+  y_29 = _RAND_61[31:0];
+  _RAND_62 = {1{`RANDOM}};
+  y_30 = _RAND_62[31:0];
+  _RAND_63 = {1{`RANDOM}};
+  y_31 = _RAND_63[31:0];
+  _RAND_64 = {1{`RANDOM}};
+  theta_1 = _RAND_64[31:0];
+  _RAND_65 = {1{`RANDOM}};
+  theta_2 = _RAND_65[31:0];
+  _RAND_66 = {1{`RANDOM}};
+  theta_3 = _RAND_66[31:0];
+  _RAND_67 = {1{`RANDOM}};
+  theta_4 = _RAND_67[31:0];
+  _RAND_68 = {1{`RANDOM}};
+  theta_5 = _RAND_68[31:0];
+  _RAND_69 = {1{`RANDOM}};
+  theta_6 = _RAND_69[31:0];
+  _RAND_70 = {1{`RANDOM}};
+  theta_7 = _RAND_70[31:0];
+  _RAND_71 = {1{`RANDOM}};
+  theta_8 = _RAND_71[31:0];
+  _RAND_72 = {1{`RANDOM}};
+  theta_9 = _RAND_72[31:0];
+  _RAND_73 = {1{`RANDOM}};
+  theta_10 = _RAND_73[31:0];
+  _RAND_74 = {1{`RANDOM}};
+  theta_11 = _RAND_74[31:0];
+  _RAND_75 = {1{`RANDOM}};
+  theta_12 = _RAND_75[31:0];
+  _RAND_76 = {1{`RANDOM}};
+  theta_13 = _RAND_76[31:0];
+  _RAND_77 = {1{`RANDOM}};
+  theta_14 = _RAND_77[31:0];
+  _RAND_78 = {1{`RANDOM}};
+  theta_15 = _RAND_78[31:0];
+  _RAND_79 = {1{`RANDOM}};
+  theta_16 = _RAND_79[31:0];
+  _RAND_80 = {1{`RANDOM}};
+  theta_17 = _RAND_80[31:0];
+  _RAND_81 = {1{`RANDOM}};
+  theta_18 = _RAND_81[31:0];
+  _RAND_82 = {1{`RANDOM}};
+  theta_19 = _RAND_82[31:0];
+  _RAND_83 = {1{`RANDOM}};
+  theta_20 = _RAND_83[31:0];
+  _RAND_84 = {1{`RANDOM}};
+  theta_21 = _RAND_84[31:0];
+  _RAND_85 = {1{`RANDOM}};
+  theta_22 = _RAND_85[31:0];
+  _RAND_86 = {1{`RANDOM}};
+  theta_23 = _RAND_86[31:0];
+  _RAND_87 = {1{`RANDOM}};
+  theta_24 = _RAND_87[31:0];
+  _RAND_88 = {1{`RANDOM}};
+  theta_25 = _RAND_88[31:0];
+  _RAND_89 = {1{`RANDOM}};
+  theta_26 = _RAND_89[31:0];
+  _RAND_90 = {1{`RANDOM}};
+  theta_27 = _RAND_90[31:0];
+  _RAND_91 = {1{`RANDOM}};
+  theta_28 = _RAND_91[31:0];
+  _RAND_92 = {1{`RANDOM}};
+  theta_29 = _RAND_92[31:0];
+  _RAND_93 = {1{`RANDOM}};
+  theta_30 = _RAND_93[31:0];
+  _RAND_94 = {1{`RANDOM}};
+  z0s_0 = _RAND_94[31:0];
+  _RAND_95 = {1{`RANDOM}};
+  z0s_1 = _RAND_95[31:0];
+  _RAND_96 = {1{`RANDOM}};
+  z0s_2 = _RAND_96[31:0];
+  _RAND_97 = {1{`RANDOM}};
+  z0s_3 = _RAND_97[31:0];
+  _RAND_98 = {1{`RANDOM}};
+  z0s_4 = _RAND_98[31:0];
+  _RAND_99 = {1{`RANDOM}};
+  z0s_5 = _RAND_99[31:0];
+  _RAND_100 = {1{`RANDOM}};
+  z0s_6 = _RAND_100[31:0];
+  _RAND_101 = {1{`RANDOM}};
+  z0s_7 = _RAND_101[31:0];
+  _RAND_102 = {1{`RANDOM}};
+  z0s_8 = _RAND_102[31:0];
+  _RAND_103 = {1{`RANDOM}};
+  z0s_9 = _RAND_103[31:0];
+  _RAND_104 = {1{`RANDOM}};
+  z0s_10 = _RAND_104[31:0];
+  _RAND_105 = {1{`RANDOM}};
+  z0s_11 = _RAND_105[31:0];
+  _RAND_106 = {1{`RANDOM}};
+  z0s_12 = _RAND_106[31:0];
+  _RAND_107 = {1{`RANDOM}};
+  z0s_13 = _RAND_107[31:0];
+  _RAND_108 = {1{`RANDOM}};
+  z0s_14 = _RAND_108[31:0];
+  _RAND_109 = {1{`RANDOM}};
+  z0s_15 = _RAND_109[31:0];
+  _RAND_110 = {1{`RANDOM}};
+  z0s_16 = _RAND_110[31:0];
+  _RAND_111 = {1{`RANDOM}};
+  z0s_17 = _RAND_111[31:0];
+  _RAND_112 = {1{`RANDOM}};
+  z0s_18 = _RAND_112[31:0];
+  _RAND_113 = {1{`RANDOM}};
+  z0s_19 = _RAND_113[31:0];
+  _RAND_114 = {1{`RANDOM}};
+  z0s_20 = _RAND_114[31:0];
+  _RAND_115 = {1{`RANDOM}};
+  z0s_21 = _RAND_115[31:0];
+  _RAND_116 = {1{`RANDOM}};
+  z0s_22 = _RAND_116[31:0];
+  _RAND_117 = {1{`RANDOM}};
+  z0s_23 = _RAND_117[31:0];
+  _RAND_118 = {1{`RANDOM}};
+  z0s_24 = _RAND_118[31:0];
+  _RAND_119 = {1{`RANDOM}};
+  z0s_25 = _RAND_119[31:0];
+  _RAND_120 = {1{`RANDOM}};
+  z0s_26 = _RAND_120[31:0];
+  _RAND_121 = {1{`RANDOM}};
+  z0s_27 = _RAND_121[31:0];
+  _RAND_122 = {1{`RANDOM}};
+  z0s_28 = _RAND_122[31:0];
+  _RAND_123 = {1{`RANDOM}};
+  z0s_29 = _RAND_123[31:0];
+  _RAND_124 = {1{`RANDOM}};
+  z0s_30 = _RAND_124[31:0];
+  _RAND_125 = {1{`RANDOM}};
+  z0s_31 = _RAND_125[31:0];
 `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
