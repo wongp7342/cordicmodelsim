@@ -49,6 +49,5 @@ add wave -noupdate -format logic -radix hexadecimal example_sim/cordicdut/io_out
 add wave -noupdate -format logic -radix float32 example_sim/cordicdut/io_out_z
 
 add wave -noupdate -format logic -radix hexadecimal example_sim/cordicdut/*
-add wave -noupdate -format logic -radix hexadecimal example_sim/cosdut/*
-
+add wave -noupdate -format logic -radix float32 example_sim/clzdut/*
 run 400us
